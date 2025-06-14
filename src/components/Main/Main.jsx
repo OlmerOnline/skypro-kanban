@@ -36,7 +36,8 @@ function Main() {
       <div className="container">
         <div className="main__block">
           <div className="main__content">
-            {isLoading ? loading : components}
+            {/* {isLoading ? loading : components} */}
+            {components}
           </div>
         </div>
       </div>
