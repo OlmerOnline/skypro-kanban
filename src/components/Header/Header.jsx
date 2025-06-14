@@ -2,10 +2,10 @@ import { useState } from "react";
 import PopUser from "../popups/PopUser/PopUser";
 
 function Header() {
-  const [isPopUser, setIsPopUser] = useState(false);
+  const [isShowPopUser, setIsShowPopUser] = useState(false);
 
   function handleClickName() {
-    setIsPopUser(!isPopUser);
+    setIsShowPopUser(!isShowPopUser);
   }
 
   return (
@@ -35,7 +35,7 @@ function Header() {
             >
               Ivan Ivanov
             </a>
-            <PopUser isShow={isPopUser} />
+            <PopUser isShow={isShowPopUser} />
           </nav>
         </div>
       </div>
