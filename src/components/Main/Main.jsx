@@ -1,20 +1,11 @@
 import { useEffect, useState } from "react";
 import { cards } from "../../../data";
 import Column from "./Column/Column";
+import { Container, MainBlock, MainContent, SMain } from "./Main.styled";
+import Loading from "./Loading";
 
 function Main() {
   const [isLoading, setIsLoading] = useState(true);
-  const loading = (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        margin: "auto",
-      }}
-    >
-      Данные загружаются
-    </div>
-  );
   let statusList = [];
 
   useEffect(() => {
@@ -32,16 +23,13 @@ function Main() {
   ));
 
   return (
-    <main className="main">
-      <div className="container">
-        <div className="main__block">
-          <div className="main__content">
-            {/* {isLoading ? loading : components} */}
-            {components}
-          </div>
-        </div>
-      </div>
-    </main>
+    <SMain>
+      <Container>
+        <MainBlock>
+          <MainContent>{isLoading ? <Loading /> : components}</MainContent>
+        </MainBlock>
+      </Container>
+    </SMain>
   );
 }
 

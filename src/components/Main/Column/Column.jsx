@@ -1,5 +1,11 @@
 import { cards } from "../../../../data";
 import CardsItem from "../CardsItem/CardsItem";
+import {
+  Cards,
+  ColumnTitle,
+  ColumnTitleParagraph,
+  MainColumn,
+} from "./Column.styled";
 
 function Column({ status }) {
   const listCard = cards.filter((card) => card.status === status);
@@ -8,12 +14,12 @@ function Column({ status }) {
   ));
 
   return (
-    <div className="main__column">
-      <div className="column__title">
-        <p>{status}</p>
-      </div>
-      <div className="cards">{components}</div>
-    </div>
+    <MainColumn>
+      <ColumnTitle>
+        <ColumnTitleParagraph>{status}</ColumnTitleParagraph>
+      </ColumnTitle>
+      <Cards>{components}</Cards>
+    </MainColumn>
   );
 }
 
