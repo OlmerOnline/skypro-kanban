@@ -9,7 +9,7 @@ function Main() {
   let statusList = [];
 
   useEffect(() => {
-    setTimeout(() => setIsLoading(false), 2000);
+    setTimeout(() => setIsLoading(false), 2);
   }, []);
 
   for (const card of cards) {
