@@ -26,7 +26,7 @@ export const HeaderBlock = styled.div`
 `;
 
 export const HeaderLogo = styled.div`
-  display: ${({ isShow }) => (isShow ? "block" : "none")};
+  display: ${({ $display }) => $display};
 `;
 
 export const HeaderNav = styled.nav`
