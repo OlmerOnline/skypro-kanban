@@ -1,38 +1,52 @@
+import {
+  CardBtn,
+  CardBtnDiv,
+  CardContent,
+  CardDate,
+  CardDateParagraph,
+  CardGroup,
+  CardsCard,
+  CardTheme,
+  CardThemeParagraph,
+  CardTitle,
+  SCardsItem,
+} from "./CardsItem.styled";
+
 function CardsItem({ card }) {
   let color = "";
 
   switch (card.topic) {
     case "Web Design":
-      color = "_orange";
+      color = "orange";
       break;
     case "Research":
-      color = "_green";
+      color = "green";
       break;
     case "Copywriting":
-      color = "_purple";
+      color = "purple";
       break;
   }
 
   return (
-    <div className="cards__item">
-      <div className="cards__card card">
-        <div className="card__group">
-          <div className={"card__theme " + color}>
-            <p className={color}>{card.topic}</p>
-          </div>
+    <SCardsItem>
+      <CardsCard>
+        <CardGroup>
+          <CardTheme $color={color}>
+            <CardThemeParagraph $color={color}>{card.topic}</CardThemeParagraph>
+          </CardTheme>
           <a href="#popBrowse" target="_self">
-            <div className="card__btn">
-              <div></div>
-              <div></div>
-              <div></div>
-            </div>
+            <CardBtn>
+              <CardBtnDiv />
+              <CardBtnDiv />
+              <CardBtnDiv />
+            </CardBtn>
           </a>
-        </div>
-        <div className="card__content">
+        </CardGroup>
+        <CardContent>
           <a href="" target="_blank">
-            <h3 className="card__title">{card.title}</h3>
+            <CardTitle>{card.title}</CardTitle>
           </a>
-          <div className="card__date">
+          <CardDate>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="13"
@@ -61,11 +75,11 @@ function CardsItem({ card }) {
                 </clipPath>
               </defs>
             </svg>
-            <p>{card.date}</p>
-          </div>
-        </div>
-      </div>
-    </div>
+            <CardDateParagraph>{card.date}</CardDateParagraph>
+          </CardDate>
+        </CardContent>
+      </CardsCard>
+    </SCardsItem>
   );
 }
 
