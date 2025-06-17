@@ -9,6 +9,7 @@ import GlobalStyle, { Wrapper } from "./App.styled.js";
 function App() {
   return (
     <>
+      <GlobalStyle />
       <Wrapper>
         <PopExit />
         <PopNewCard />
@@ -16,7 +17,6 @@ function App() {
         <Header />
         <Main />
       </Wrapper>
-      <GlobalStyle />
     </>
   );
 }

@@ -25,7 +25,7 @@ function Header() {
           <HeaderLogo $display={isLightTheme ? "block" : "none"}>
             <a href="" target="_self">
               <img
-                src="../public/images/logo.png"
+                src="/images/logo.png"
                 alt="logo"
                 style={{ width: "85px" }}
               />
@@ -34,7 +34,7 @@ function Header() {
           <HeaderLogo $display={isLightTheme ? "none" : "block"}>
             <a href="" target="_self">
               <img
-                src="../public/images/logo_dark.png"
+                src="/images/logo_dark.png"
                 alt="logo"
                 style={{ width: "85px" }}
               />
