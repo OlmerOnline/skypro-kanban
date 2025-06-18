@@ -1,7 +1,7 @@
+import { useNavigate } from "react-router-dom";
 import {
   HeaderPopUserSet,
   PopUserSetButton,
-  PopUserSetLink,
   PopUserSetMail,
   PopUserSetName,
   PopUserSetTheme,
@@ -10,6 +10,15 @@ import {
 } from "./PopUser.styled";
 
 function PopUser({ isShow }) {
+  const navigate = useNavigate();
+
+  function handleExit(event) {
+    event.preventDefault();
+    console.log("Клик Exit");
+
+    navigate("/exit");
+  }
+
   return (
     <HeaderPopUserSet $isShow={isShow} id="user-set-target">
       <PopUserSetName>Ivan Ivanov</PopUserSetName>
@@ -21,9 +30,7 @@ function PopUser({ isShow }) {
           name="checkbox"
         ></PopUserSetThemeInput>
       </PopUserSetTheme>
-      <PopUserSetButton>
-        <PopUserSetLink href="#popExit">Выйти</PopUserSetLink>
-      </PopUserSetButton>
+      <PopUserSetButton onClick={handleExit}>Выход</PopUserSetButton>
     </HeaderPopUserSet>
 
     // <div

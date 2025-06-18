@@ -1,5 +1,4 @@
-import { useState } from "react";
-import PopUser from "../popups/PopUser/PopUser";
+import { useEffect, useState } from "react";
 import {
   Container,
   HeaderBlock,
@@ -9,21 +8,37 @@ import {
   HeaderUser,
   SHeader,
 } from "./Header.styled";
+import { useNavigate } from "react-router-dom";
 
 function Header() {
-  const [isShowPopUser, setIsShowPopUser] = useState(false);
   const isLightTheme = true;
+  const [isShowPopUser, setIsShowPopUser] = useState(false);
+  const navigate = useNavigate();
 
-  function handleClickName() {
+  function handleUser(event) {
+    event.preventDefault();
+    console.log("Клик User");
     setIsShowPopUser(!isShowPopUser);
   }
+
+  function handleLogo() {
+    console.log("Клик Logo");
+    setIsShowPopUser(false);
+  }
+
+  useEffect(() => {
+    isShowPopUser ? navigate("/user") : navigate("/");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isShowPopUser]);
+
+  useEffect(() => {}, []);
 
   return (
     <SHeader>
       <Container>
         <HeaderBlock>
           <HeaderLogo $display={isLightTheme ? "block" : "none"}>
-            <a href="" target="_self">
+            <a onClick={handleLogo}>
               <img
                 src="/images/logo.png"
                 alt="logo"
@@ -32,7 +47,7 @@ function Header() {
             </a>
           </HeaderLogo>
           <HeaderLogo $display={isLightTheme ? "none" : "block"}>
-            <a href="" target="_self">
+            <a onClick={handleLogo}>
               <img
                 src="/images/logo_dark.png"
                 alt="logo"
@@ -46,8 +61,7 @@ function Header() {
                 Создать новую задачу
               </a>
             </HeaderBtnMainNew>
-            <HeaderUser onClick={handleClickName}>Ivan Ivanov</HeaderUser>
-            <PopUser isShow={isShowPopUser} />
+            <HeaderUser onClick={handleUser}>Ivan Ivanov</HeaderUser>
           </HeaderNav>
         </HeaderBlock>
       </Container>

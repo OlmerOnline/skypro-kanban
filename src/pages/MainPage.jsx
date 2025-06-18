@@ -11,7 +11,6 @@ function MainPage() {
     <>
       <GlobalStyle />
       <Wrapper>
-        <PopExit />
         <PopNewCard />
         <PopBrowse />
         <Header />

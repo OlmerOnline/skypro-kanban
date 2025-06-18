@@ -88,9 +88,9 @@ export const PopUserSetButton = styled.button`
     color: #ffffff;
   }
 
-  &:hover a {
+  /* &:hover a {
     color: #ffffff;
-  }
+  } */
 `;
 
 export const PopUserSetLink = styled.a`
