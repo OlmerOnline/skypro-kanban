@@ -6,6 +6,7 @@ import UserPage from "../../pages/UserPage";
 import ExitPage from "../../pages/ExitPage";
 import NewTaskPage from "../../pages/NewTaskPage";
 import TaskPage from "../../pages/TaskPage";
+import NotFoundPage from "../../pages/NotFoundPage";
 
 function AppRoutes() {
   return (
@@ -21,6 +22,7 @@ function AppRoutes() {
         path="/registration"
         element={<RegistrationPage isRegistration={true} />}
       />
+      <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );
 }
