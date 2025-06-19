@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import {
   CardBtn,
   CardBtnDiv,
@@ -34,13 +35,13 @@ function CardsItem({ card }) {
           <CardTheme $color={color}>
             <CardThemeParagraph $color={color}>{card.topic}</CardThemeParagraph>
           </CardTheme>
-          <a href="#popBrowse" target="_self">
+          <Link to={"/task/" + card.id}>
             <CardBtn>
               <CardBtnDiv />
               <CardBtnDiv />
               <CardBtnDiv />
             </CardBtn>
-          </a>
+          </Link>
         </CardGroup>
         <CardContent>
           <a href="" target="_blank">
