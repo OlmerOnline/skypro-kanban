@@ -4,6 +4,7 @@ import LoginPage from "../../pages/LoginPage";
 import RegistrationPage from "../../pages/RegistrationPage";
 import UserPage from "../../pages/UserPage";
 import ExitPage from "../../pages/ExitPage";
+import NewTaskPage from "../../pages/NewTaskPage";
 
 function AppRoutes() {
   return (
@@ -11,6 +12,7 @@ function AppRoutes() {
       <Route path="/" element={<MainPage />}>
         <Route path="/user" element={<UserPage isShow={true} />} />
         <Route path="/exit" element={<ExitPage isShow={true} />} />
+        <Route path="/new-task" element={<NewTaskPage isShow={true} />} />
       </Route>
       <Route path="/login" element={<LoginPage isRegistration={false} />} />
       <Route

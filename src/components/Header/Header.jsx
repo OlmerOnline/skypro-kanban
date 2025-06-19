@@ -8,7 +8,7 @@ import {
   HeaderUser,
   SHeader,
 } from "./Header.styled";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Header() {
   const isLightTheme = true;
@@ -57,9 +57,9 @@ function Header() {
           </HeaderLogo>
           <HeaderNav>
             <HeaderBtnMainNew id="btnMainNew">
-              <a href="#popNewCard" style={{ color: "#ffffff" }}>
+              <Link to="/new-task" style={{ color: "#ffffff" }}>
                 Создать новую задачу
-              </a>
+              </Link>
             </HeaderBtnMainNew>
             <HeaderUser onClick={handleUser}>Ivan Ivanov</HeaderUser>
           </HeaderNav>
