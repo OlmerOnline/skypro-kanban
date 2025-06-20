@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import {
   ExitButton,
   PopExitBlock,
@@ -7,7 +8,16 @@ import {
   SPopExit,
 } from "./PopExit.styled";
 
-function PopExit(isShow) {
+function PopExit({ isShow, setIsAuth }) {
+  const navigate = useNavigate();
+
+  function handleLogout(event) {
+    event.preventDefault();
+
+    setIsAuth(false);
+    navigate("/login");
+  }
+
   return (
     <SPopExit id="popExit" $isShow={isShow}>
       <PopExitContainer>
@@ -17,7 +27,7 @@ function PopExit(isShow) {
           </div>
           <form id="formExit">
             <PopExitFormGroup>
-              <ExitButton $isConfirm={true} to="/login">
+              <ExitButton $isConfirm={true} onClick={handleLogout}>
                 Да, выйти
               </ExitButton>
               <ExitButton $isConfirm={false} to="/">

@@ -13,11 +13,13 @@ import GlobalStyle, {
   Wrapper,
 } from "./Auth.styled";
 
-function Auth({ isRegistration }) {
+function Auth({ isRegistration, setIsAuth }) {
   const navigate = useNavigate();
 
   function handleLogin(event) {
     event.preventDefault();
+
+    setIsAuth(true);
     navigate("/");
   }
 

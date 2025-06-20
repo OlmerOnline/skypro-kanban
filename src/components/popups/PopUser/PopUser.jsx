@@ -14,8 +14,6 @@ function PopUser({ isShow }) {
 
   function handleExit(event) {
     event.preventDefault();
-    console.log("Клик Exit");
-
     navigate("/exit");
   }
 

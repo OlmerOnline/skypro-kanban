@@ -64,6 +64,7 @@ export const ExitButton = styled(Link)`
   height: 30px;
   background-color: ${({ $isConfirm }) =>
     $isConfirm ? "#565eef" : "transparent"};
+  color: ${({ $isConfirm }) => ($isConfirm ? "#ffffff" : "#565eef")};
   border: ${({ $isConfirm }) =>
     $isConfirm ? "none" : "0.7px solid var(--palette-navy-60, #565eef)"};
   outline: none;
@@ -73,7 +74,6 @@ export const ExitButton = styled(Link)`
   font-size: 14px;
   line-height: 21px;
   letter-spacing: -0.14px;
-  color: ${({ $isConfirm }) => ($isConfirm ? "#ffffff" : "#565eef")};
 
   &:hover {
     background-color: #33399b;

@@ -1,7 +1,7 @@
 import Auth from "../components/Auth/Auth";
 
-function LoginPage({ isRegistration }) {
-  return <Auth isRegistration={isRegistration} />;
+function LoginPage({ isRegistration, setIsAuth }) {
+  return <Auth isRegistration={isRegistration} setIsAuth={setIsAuth} />;
 }
 
 export default LoginPage;

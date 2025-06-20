@@ -17,12 +17,10 @@ function Header() {
 
   function handleUser(event) {
     event.preventDefault();
-    console.log("Клик User");
     setIsShowPopUser(!isShowPopUser);
   }
 
   function handleLogo() {
-    console.log("Клик Logo");
     setIsShowPopUser(false);
   }
 
