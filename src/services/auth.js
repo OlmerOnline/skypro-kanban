@@ -15,3 +15,17 @@ export async function login(user) {
     throw new Error(error.response.data.error);
   }
 }
+
+export async function registration(user) {
+  try {
+    const data = await axios.post(URL, user, {
+      headers: {
+        "Content-Type": "",
+      },
+    });
+
+    return data.data.user;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+}

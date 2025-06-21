@@ -12,24 +12,82 @@ import GlobalStyle, {
   Title,
   Wrapper,
 } from "./Auth.styled";
-import { login } from "../../services/auth";
+import { login, registration } from "../../services/auth";
 import { setLocalStorage } from "../../services/localStorage";
+import { useState } from "react";
 
 function Auth({ isRegistration, setIsAuth }) {
   const navigate = useNavigate();
 
+  const [formData, setFormData] = useState({
+    name: "",
+    login: "",
+    password: "",
+  });
+  const [errors, setErrors] = useState({
+    name: false,
+    login: false,
+    password: false,
+  });
+  const [textError, setTextError] = useState("");
+
+  function validate() {
+    const newErrors = {
+      name: false,
+      login: false,
+      password: false,
+    };
+    let isValid = true;
+
+    if (isRegistration && !formData.name.trim()) {
+      newErrors.name = true;
+      setTextError("Заполните все поля");
+      isValid = false;
+    }
+    if (!formData.login.trim()) {
+      newErrors.login = true;
+      setTextError("Заполните все поля");
+      isValid = false;
+    }
+    if (!formData.password.trim()) {
+      newErrors.password = true;
+      setTextError("Заполните все поля");
+      isValid = false;
+    }
+
+    setErrors(newErrors);
+    return isValid;
+  }
+
+  function handleChange(event) {
+    const { name, value } = event.target;
+
+    setFormData({ ...formData, [name]: value });
+    setErrors({ ...errors, [name]: value });
+    setTextError("");
+  }
+
   async function handleLogin(event) {
     event.preventDefault();
 
-    const user = await login({
-      login: "admin",
-      password: "admin",
-    });
-    console.log(user);
-    setLocalStorage(user);
+    if (!validate()) {
+      return;
+    }
 
-    setIsAuth(true);
-    navigate("/");
+    try {
+      const user = !isRegistration
+        ? await login(formData)
+        : await registration(formData);
+
+      if (user) {
+        console.log(user);
+        setLocalStorage(user);
+        setIsAuth(true);
+        navigate("/");
+      }
+    } catch (error) {
+      setTextError(error.message);
+    }
   }
 
   return (
@@ -49,6 +107,9 @@ function Auth({ isRegistration, setIsAuth }) {
                     name="name"
                     id="formName"
                     placeholder="Имя"
+                    value={formData.name}
+                    onChange={handleChange}
+                    $error={errors.name}
                   />
                 )}
                 <InputAuth
@@ -56,13 +117,20 @@ function Auth({ isRegistration, setIsAuth }) {
                   name="login"
                   id="formLogin"
                   placeholder="Эл. почта"
+                  value={formData.login}
+                  onChange={handleChange}
+                  $error={errors.login}
                 />
                 <InputAuth
                   type="password"
                   name="password"
                   id="formPassword"
                   placeholder="Пароль"
+                  value={formData.password}
+                  onChange={handleChange}
+                  $error={errors.password}
                 />
+                <p style={{ color: "red" }}>{textError}</p>
                 <ButtonEnter id="btnEnter" onClick={handleLogin}>
                   {!isRegistration ? "Войти" : "Зарегистрироваться"}
                 </ButtonEnter>
