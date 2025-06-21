@@ -9,9 +9,10 @@ import TaskPage from "../../pages/TaskPage";
 import NotFoundPage from "../../pages/NotFoundPage";
 import PrivateRoute from "../PrivateRoute/PrivateRoute";
 import { useState } from "react";
+import { getLocalStorage } from "../../services/localStorage";
 
 function AppRoutes() {
-  const [isAuth, setIsAuth] = useState(false);
+  const [isAuth, setIsAuth] = useState(getLocalStorage ? true : false);
 
   return (
     <Routes>

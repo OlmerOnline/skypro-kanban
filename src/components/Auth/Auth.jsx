@@ -12,12 +12,21 @@ import GlobalStyle, {
   Title,
   Wrapper,
 } from "./Auth.styled";
+import { login } from "../../services/auth";
+import { setLocalStorage } from "../../services/localStorage";
 
 function Auth({ isRegistration, setIsAuth }) {
   const navigate = useNavigate();
 
-  function handleLogin(event) {
+  async function handleLogin(event) {
     event.preventDefault();
+
+    const user = await login({
+      login: "admin",
+      password: "admin",
+    });
+    console.log(user);
+    setLocalStorage(user);
 
     setIsAuth(true);
     navigate("/");
