@@ -52,6 +52,7 @@ export const HeaderBtnMainNew = styled.button`
     background-color: #33399b;
   }
 `;
+HeaderBtnMainNew.displayName = "HeaderBtnMainNew";
 
 export const HeaderUser = styled.a`
   height: 20px;

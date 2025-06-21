@@ -1,35 +1,38 @@
+import { useNavigate } from "react-router-dom";
 import {
+  ExitButton,
   PopExitBlock,
   PopExitContainer,
-  PopExitExitNo,
-  PopExitExitNoLink,
-  PopExitExitYes,
-  PopExitExitYesLink,
   PopExitFormGroup,
   PopExitTtlH2,
   SPopExit,
 } from "./PopExit.styled";
 
-function PopExit() {
+function PopExit({ isShow, setIsAuth }) {
+  const navigate = useNavigate();
+
+  function handleLogout(event) {
+    event.preventDefault();
+
+    setIsAuth(false);
+    navigate("/login");
+  }
+
   return (
-    <SPopExit id="popExit">
+    <SPopExit id="popExit" $isShow={isShow}>
       <PopExitContainer>
         <PopExitBlock>
           <div>
             <PopExitTtlH2>Выйти из аккаунта?</PopExitTtlH2>
           </div>
-          <form id="formExit" action="#">
+          <form id="formExit">
             <PopExitFormGroup>
-              <PopExitExitYes id="exitYes">
-                <PopExitExitYesLink href="modal/signin.html">
-                  Да, выйти
-                </PopExitExitYesLink>
-              </PopExitExitYes>
-              <PopExitExitNo id="exitNo">
-                <PopExitExitNoLink href="main.html">
-                  Нет, остаться
-                </PopExitExitNoLink>
-              </PopExitExitNo>
+              <ExitButton $isConfirm={true} onClick={handleLogout}>
+                Да, выйти
+              </ExitButton>
+              <ExitButton $isConfirm={false} to="/">
+                Нет, остаться
+              </ExitButton>
             </PopExitFormGroup>
           </form>
         </PopExitBlock>

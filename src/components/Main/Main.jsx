@@ -3,13 +3,14 @@ import { cards } from "../../../data";
 import Column from "./Column/Column";
 import { Container, MainBlock, MainContent, SMain } from "./Main.styled";
 import Loading from "./Loading";
+import { Outlet } from "react-router-dom";
 
 function Main() {
   const [isLoading, setIsLoading] = useState(true);
   let statusList = [];
 
   useEffect(() => {
-    setTimeout(() => setIsLoading(false), 2);
+    setTimeout(() => setIsLoading(false), 1);
   }, []);
 
   for (const card of cards) {
@@ -29,6 +30,7 @@ function Main() {
           <MainContent>{isLoading ? <Loading /> : components}</MainContent>
         </MainBlock>
       </Container>
+      <Outlet />
     </SMain>
   );
 }

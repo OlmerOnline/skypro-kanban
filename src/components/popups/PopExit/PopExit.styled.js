@@ -1,7 +1,8 @@
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 export const SPopExit = styled.div`
-  display: none;
+  display: ${({ $isShow }) => ($isShow ? "block" : "none")};
   width: 100%;
   height: 100%;
   min-width: 320px;
@@ -15,6 +16,7 @@ export const SPopExit = styled.div`
     display: block;
   }
 `;
+SPopExit.displayName = "SPopExit";
 
 export const PopExitContainer = styled.div`
   width: 100%;
@@ -54,69 +56,27 @@ export const PopExitFormGroup = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 10px;
 `;
 
-export const PopExitExitYes = styled.button`
+export const ExitButton = styled(Link)`
   width: 153px;
   height: 30px;
-  background-color: #565eef;
-  border-radius: 4px;
-  border: none;
+  background-color: ${({ $isConfirm }) =>
+    $isConfirm ? "#565eef" : "transparent"};
+  color: ${({ $isConfirm }) => ($isConfirm ? "#ffffff" : "#565eef")};
+  border: ${({ $isConfirm }) =>
+    $isConfirm ? "none" : "0.7px solid var(--palette-navy-60, #565eef)"};
   outline: none;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 14px;
   line-height: 21px;
-  font-weight: 500;
   letter-spacing: -0.14px;
-  color: #ffffff;
-  margin-right: 10px;
 
   &:hover {
     background-color: #33399b;
+    color: ${({ $isConfirm }) => !$isConfirm && "#ffffff"};
   }
-`;
-
-export const PopExitExitYesLink = styled.a`
-  width: 100%;
-  height: 100%;
-  color: #ffffff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-export const PopExitExitNo = styled.button`
-  width: 153px;
-  height: 30px;
-  background-color: transparent;
-  border-radius: 4px;
-  border: 0.7px solid var(--palette-navy-60, #565eef);
-  outline: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
-  line-height: 21px;
-  font-weight: 500;
-  letter-spacing: -0.14px;
-  color: #ffffff;
-
-  &:hover {
-    background-color: #33399b;
-    color: #ffffff;
-  }
-  &:hover a {
-    color: #ffffff;
-  }
-`;
-
-export const PopExitExitNoLink = styled.a`
-  width: 100%;
-  height: 100%;
-  color: #565eef;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 `;
