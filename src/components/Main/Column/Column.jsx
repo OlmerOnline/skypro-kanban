@@ -1,4 +1,3 @@
-import { cards } from "../../../../data";
 import CardsItem from "../CardsItem/CardsItem";
 import {
   Cards,
@@ -7,10 +6,10 @@ import {
   MainColumn,
 } from "./Column.styled";
 
-function Column({ status }) {
+function Column({ status, cards }) {
   const listCard = cards.filter((card) => card.status === status);
   const components = listCard.map((card) => (
-    <CardsItem key={card.id} card={card} />
+    <CardsItem key={card._id} card={card} />
   ));
 
   return (
