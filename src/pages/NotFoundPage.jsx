@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import styled, { createGlobalStyle } from "styled-components";
 
 const GlobalStyle = createGlobalStyle`
@@ -67,6 +68,29 @@ const Title = styled.h2`
   margin-bottom: 20px;
 `;
 
+const Button = styled(Link)`
+  width: 100%;
+  height: 30px;
+  background-color: #565eef;
+  border-radius: 4px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border: none;
+  outline: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  line-height: 21px;
+  letter-spacing: -0.14px;
+  color: #ffffff;
+  text-decoration: none;
+
+  &:hover {
+    background-color: #33399b;
+  }
+`;
+
 function NotFoundPage() {
   return (
     <>
@@ -76,6 +100,7 @@ function NotFoundPage() {
           <Block>
             <Content>
               <Title>Страница не найдена</Title>
+              <Button to="/">На главную</Button>
             </Content>
           </Block>
         </Container>
