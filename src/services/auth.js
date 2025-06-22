@@ -26,6 +26,6 @@ export async function registration(user) {
 
     return data.data.user;
   } catch (error) {
-    throw new Error(error.message);
+    throw new Error(error.response.data.error);
   }
 }

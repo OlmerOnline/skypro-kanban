@@ -63,7 +63,7 @@ function Auth({ isRegistration, setIsAuth }) {
     const { name, value } = event.target;
 
     setFormData({ ...formData, [name]: value });
-    setErrors({ ...errors, [name]: value });
+    setErrors({ ...errors, [name]: false });
     setTextError("");
   }
 
@@ -86,7 +86,20 @@ function Auth({ isRegistration, setIsAuth }) {
         navigate("/");
       }
     } catch (error) {
-      setTextError(error.message);
+      switch (error.message) {
+        case "login должен содержать хотя бы 3 символа":
+          setTextError("Логин должен содержать хотя бы 3 символа");
+          break;
+        case "password должен содержать хотя бы 3 символа":
+          setTextError("Пароль должен содержать хотя бы 3 символа");
+          break;
+        case "name должен содержать хотя бы 3 символа":
+          setTextError("Имя должно содержать хотя бы 3 символа");
+          break;
+        default:
+          setTextError(error.message);
+          break;
+      }
     }
   }
 
@@ -131,7 +144,11 @@ function Auth({ isRegistration, setIsAuth }) {
                   $error={errors.password}
                 />
                 <p style={{ color: "red" }}>{textError}</p>
-                <ButtonEnter id="btnEnter" onClick={handleLogin}>
+                <ButtonEnter
+                  id="btnEnter"
+                  onClick={handleLogin}
+                  disabled={textError ? true : false}
+                >
                   {!isRegistration ? "Войти" : "Зарегистрироваться"}
                 </ButtonEnter>
                 <FooterAuth>
