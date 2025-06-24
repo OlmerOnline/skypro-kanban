@@ -1,21 +1,21 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Column from "./Column/Column";
 import { Container, MainBlock, MainContent, SMain } from "./Main.styled";
 import Loading from "./Loading";
 import { Outlet } from "react-router-dom";
 import { fetchGetCards } from "../../services/api";
-import { getLocalStorage } from "../../services/localStorage";
+import { AuthContext } from "../../context/AuthContext";
 
 function Main() {
   const [isLoading, setIsLoading] = useState(false);
   const [cards, setCards] = useState([]);
   let statusList = [];
-  const token = getLocalStorage().token;
+  const { user } = useContext(AuthContext);
 
   async function getCards() {
     try {
       setIsLoading(true);
-      const data = await fetchGetCards(token);
+      const data = await fetchGetCards(user.token);
 
       if (data) {
         setCards(data);
@@ -29,6 +29,7 @@ function Main() {
 
   useEffect(() => {
     getCards();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   for (const card of cards) {

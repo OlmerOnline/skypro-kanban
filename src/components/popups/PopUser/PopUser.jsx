@@ -8,20 +8,23 @@ import {
   PopUserSetThemeInput,
   PopUserSetThemeParagraph,
 } from "./PopUser.styled";
-import { getLocalStorage } from "../../../services/localStorage";
+import { useContext } from "react";
+import { AuthContext } from "../../../context/AuthContext";
 
 function PopUser({ isShow }) {
+  const { user } = useContext(AuthContext);
   const navigate = useNavigate();
 
   function handleExit(event) {
     event.preventDefault();
+
     navigate("/exit");
   }
 
   return (
     <HeaderPopUserSet $isShow={isShow} id="user-set-target">
-      <PopUserSetName>{getLocalStorage().name}</PopUserSetName>
-      <PopUserSetMail>{getLocalStorage().login}</PopUserSetMail>
+      <PopUserSetName>{user.name}</PopUserSetName>
+      <PopUserSetMail>{user.login}</PopUserSetMail>
       <PopUserSetTheme>
         <PopUserSetThemeParagraph>Темная тема</PopUserSetThemeParagraph>
         <PopUserSetThemeInput

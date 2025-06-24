@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   Container,
   HeaderBlock,
@@ -9,28 +9,28 @@ import {
   SHeader,
 } from "./Header.styled";
 import { Link, useNavigate } from "react-router-dom";
-import { getLocalStorage } from "../../services/localStorage";
+import { AuthContext } from "../../context/AuthContext";
 
 function Header() {
+  const { user } = useContext(AuthContext);
   const isLightTheme = true;
-  const [isShowPopUser, setIsShowPopUser] = useState(false);
+  const [isShow, setIsShow] = useState(false);
   const navigate = useNavigate();
 
   function handleUser(event) {
     event.preventDefault();
-    setIsShowPopUser(!isShowPopUser);
+    console.log(`${isShow} → ${!isShow}`);
+    setIsShow(!isShow);
   }
 
   function handleLogo() {
-    setIsShowPopUser(false);
+    setIsShow(false);
   }
 
   useEffect(() => {
-    isShowPopUser ? navigate("/user") : navigate("/");
+    isShow ? navigate("/user") : navigate("/");
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isShowPopUser]);
-
-  useEffect(() => {}, []);
+  }, [isShow]);
 
   return (
     <SHeader>
@@ -60,13 +60,12 @@ function Header() {
                 Создать новую задачу
               </Link>
             </HeaderBtnMainNew>
-            <HeaderUser onClick={handleUser}>
-              {getLocalStorage().name}
-            </HeaderUser>
+            <HeaderUser onClick={handleUser}>{user.name}</HeaderUser>
           </HeaderNav>
         </HeaderBlock>
       </Container>
     </SHeader>
+
     // <header className="header">
     //     <div className="container">
     //       <div className="header__block">

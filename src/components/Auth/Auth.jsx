@@ -13,13 +13,14 @@ import GlobalStyle, {
   Wrapper,
 } from "./Auth.styled";
 import { login, registration } from "../../services/auth";
-import { setLocalStorage } from "../../services/localStorage";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { AuthContext } from "../../context/AuthContext";
 
 const VALIDATION_FIELDS = { name: false, login: false, password: false };
 
-function Auth({ isRegistration, setIsAuth }) {
+function Auth({ isRegistration }) {
   const navigate = useNavigate();
+  const { updateUser } = useContext(AuthContext);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -71,11 +72,11 @@ function Auth({ isRegistration, setIsAuth }) {
 
       if (user) {
         console.log(user);
-        setLocalStorage(user);
-        setIsAuth(true);
+        updateUser(user);
         navigate("/");
       }
     } catch (error) {
+      console.log(error);
       switch (error.message) {
         case "login должен содержать хотя бы 3 символа":
           setTextError("Логин должен содержать хотя бы 3 символа");
