@@ -1,3 +1,4 @@
+import { useContext } from "react";
 import CardsItem from "../CardsItem/CardsItem";
 import {
   Cards,
@@ -5,11 +6,13 @@ import {
   ColumnTitleParagraph,
   MainColumn,
 } from "./Column.styled";
+import { TasksContext } from "../../../context/TasksContext";
 
-function Column({ status, cards }) {
-  const listCard = cards.filter((card) => card.status === status);
-  const components = listCard.map((card) => (
-    <CardsItem key={card._id} card={card} />
+function Column({ status }) {
+  const { tasks } = useContext(TasksContext);
+  const listTask = tasks.filter((task) => task.status === status);
+  const components = listTask.map((task) => (
+    <CardsItem key={task._id} task={task} />
   ));
 
   return (

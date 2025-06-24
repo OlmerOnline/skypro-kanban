@@ -27,11 +27,13 @@ import {
   Title,
   Wrap,
 } from "./PopTask.styled";
-import { cards } from "../../../../data";
+import { useContext } from "react";
+import { TasksContext } from "../../../context/TasksContext";
 
 function PopTask({ isShow }) {
+  const { tasks } = useContext(TasksContext);
   const { id } = useParams();
-  const card = cards.find((card) => card.id === id);
+  const task = tasks.find((task) => task._id === id);
   const statuses = [
     "Без статуса",
     "Нужно сделать",
@@ -41,7 +43,7 @@ function PopTask({ isShow }) {
   ];
 
   const components = statuses
-    .filter((status) => status !== card.status)
+    .filter((status) => status !== task.status)
     .map((status, index) => (
       <StatusTheme key={index} $isHide={true}>
         <StatusThemeText>{status}</StatusThemeText>
@@ -54,9 +56,9 @@ function PopTask({ isShow }) {
         <Block>
           <Content>
             <Header>
-              <Title>Название задачи</Title>
-              <CategoriesTheme $isTop={true} $color={card.topic}>
-                <ThemeText $color={card.topic}>{card.topic}</ThemeText>
+              <Title>{task.title}</Title>
+              <CategoriesTheme $isTop={true} $color={task.topic}>
+                <ThemeText $color={task.topic}>{task.topic}</ThemeText>
               </CategoriesTheme>
             </Header>
 
@@ -64,7 +66,7 @@ function PopTask({ isShow }) {
               <StatusTitle>Статус</StatusTitle>
               <StatusThemes>
                 <StatusTheme $isHide={false}>
-                  <StatusThemeText>{card.status}</StatusThemeText>
+                  <StatusThemeText>{task.status}</StatusThemeText>
                 </StatusTheme>
                 {components}
               </StatusThemes>
@@ -87,8 +89,8 @@ function PopTask({ isShow }) {
 
             <BlockCategoriesBot>
               <CategoriesBotTitle>Категория</CategoriesBotTitle>
-              <CategoriesTheme $isTop={false} $color={card.topic}>
-                <ThemeText $color={card.topic}>{card.topic}</ThemeText>
+              <CategoriesTheme $isTop={false} $color={task.topic}>
+                <ThemeText $color={task.topic}>{task.topic}</ThemeText>
               </CategoriesTheme>
             </BlockCategoriesBot>
 

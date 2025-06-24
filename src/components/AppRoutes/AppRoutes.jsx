@@ -8,12 +8,20 @@ import NewTaskPage from "../../pages/NewTaskPage";
 import TaskPage from "../../pages/TaskPage";
 import NotFoundPage from "../../pages/NotFoundPage";
 import PrivateRoute from "../PrivateRoute/PrivateRoute";
+import TasksProvider from "../../context/TasksProvider";
 
 function AppRoutes() {
   return (
     <Routes>
       <Route element={<PrivateRoute />}>
-        <Route path="/" element={<MainPage />}>
+        <Route
+          path="/"
+          element={
+            <TasksProvider>
+              <MainPage />
+            </TasksProvider>
+          }
+        >
           <Route path="/user" element={<UserPage isShow={true} />} />
           <Route path="/exit" element={<ExitPage isShow={true} />} />
           <Route path="/new-task" element={<NewTaskPage isShow={true} />} />
