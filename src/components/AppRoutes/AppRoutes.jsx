@@ -12,7 +12,7 @@ import { useState } from "react";
 import { getLocalStorage } from "../../services/localStorage";
 
 function AppRoutes() {
-  const [isAuth, setIsAuth] = useState(getLocalStorage() ? true : false);
+  const [isAuth, setIsAuth] = useState(!!getLocalStorage());
 
   return (
     <Routes>

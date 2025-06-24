@@ -16,6 +16,8 @@ import { login, registration } from "../../services/auth";
 import { setLocalStorage } from "../../services/localStorage";
 import { useState } from "react";
 
+const VALIDATION_FIELDS = { name: false, login: false, password: false };
+
 function Auth({ isRegistration, setIsAuth }) {
   const navigate = useNavigate();
 
@@ -24,39 +26,27 @@ function Auth({ isRegistration, setIsAuth }) {
     login: "",
     password: "",
   });
-  const [errors, setErrors] = useState({
-    name: false,
-    login: false,
-    password: false,
-  });
+  const [errors, setErrors] = useState(VALIDATION_FIELDS);
   const [textError, setTextError] = useState("");
 
   function validate() {
-    const newErrors = {
-      name: false,
-      login: false,
-      password: false,
-    };
-    let isValid = true;
+    const newErrors = VALIDATION_FIELDS;
 
     if (isRegistration && !formData.name.trim()) {
       newErrors.name = true;
       setTextError("Заполните все поля");
-      isValid = false;
     }
     if (!formData.login.trim()) {
       newErrors.login = true;
       setTextError("Заполните все поля");
-      isValid = false;
     }
     if (!formData.password.trim()) {
       newErrors.password = true;
       setTextError("Заполните все поля");
-      isValid = false;
     }
 
     setErrors(newErrors);
-    return isValid;
+    return !Object.values(newErrors).filter(Boolean).length;
   }
 
   function handleChange(event) {
@@ -147,7 +137,7 @@ function Auth({ isRegistration, setIsAuth }) {
                 <ButtonEnter
                   id="btnEnter"
                   onClick={handleLogin}
-                  disabled={textError ? true : false}
+                  disabled={!!textError}
                 >
                   {!isRegistration ? "Войти" : "Зарегистрироваться"}
                 </ButtonEnter>
