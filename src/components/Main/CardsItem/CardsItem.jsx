@@ -35,7 +35,7 @@ function CardsItem({ card }) {
           <CardTheme $color={color}>
             <CardThemeParagraph $color={color}>{card.topic}</CardThemeParagraph>
           </CardTheme>
-          <Link to={"/task/" + card.id}>
+          <Link to={"/task/" + card._id}>
             <CardBtn>
               <CardBtnDiv />
               <CardBtnDiv />

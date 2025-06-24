@@ -111,7 +111,8 @@ export const InputAuth = styled.input`
   width: 100%;
   min-width: 100%;
   border-radius: 8px;
-  border: 0.7px solid rgba(148, 166, 190, 0.4);
+  border: 0.7px solid
+    ${({ $error }) => ($error ? "red" : "rgba(148, 166, 190, 0.4)")}; //rgba(148, 166, 190, 0.4);
   outline: none;
   padding: 10px 8px;
 
@@ -146,6 +147,13 @@ export const ButtonEnter = styled.button`
 
   &:hover {
     background-color: #33399b;
+  }
+  &:disabled {
+    background-color: #94a6be;
+  }
+  &:disabled:hover {
+    background-color: #94a6be;
+    cursor: auto;
   }
 `;
 ButtonEnter.displayName = "ButtonEnter";

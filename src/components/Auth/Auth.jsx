@@ -12,15 +12,85 @@ import GlobalStyle, {
   Title,
   Wrapper,
 } from "./Auth.styled";
+import { login, registration } from "../../services/auth";
+import { setLocalStorage } from "../../services/localStorage";
+import { useState } from "react";
+
+const VALIDATION_FIELDS = { name: false, login: false, password: false };
 
 function Auth({ isRegistration, setIsAuth }) {
   const navigate = useNavigate();
 
-  function handleLogin(event) {
+  const [formData, setFormData] = useState({
+    name: "",
+    login: "",
+    password: "",
+  });
+  const [errors, setErrors] = useState(VALIDATION_FIELDS);
+  const [textError, setTextError] = useState("");
+
+  function validate() {
+    const newErrors = VALIDATION_FIELDS;
+
+    if (isRegistration && !formData.name.trim()) {
+      newErrors.name = true;
+      setTextError("Заполните все поля");
+    }
+    if (!formData.login.trim()) {
+      newErrors.login = true;
+      setTextError("Заполните все поля");
+    }
+    if (!formData.password.trim()) {
+      newErrors.password = true;
+      setTextError("Заполните все поля");
+    }
+
+    setErrors(newErrors);
+    return !Object.values(newErrors).filter(Boolean).length;
+  }
+
+  function handleChange(event) {
+    const { name, value } = event.target;
+
+    setFormData({ ...formData, [name]: value });
+    setErrors({ ...errors, [name]: false });
+    setTextError("");
+  }
+
+  async function handleLogin(event) {
     event.preventDefault();
 
-    setIsAuth(true);
-    navigate("/");
+    if (!validate()) {
+      return;
+    }
+
+    try {
+      const user = !isRegistration
+        ? await login(formData)
+        : await registration(formData);
+
+      if (user) {
+        console.log(user);
+        setLocalStorage(user);
+        setIsAuth(true);
+        navigate("/");
+      }
+    } catch (error) {
+      switch (error.message) {
+        case "login должен содержать хотя бы 3 символа":
+          setTextError("Логин должен содержать хотя бы 3 символа");
+          break;
+        case "password должен содержать хотя бы 3 символа":
+          setTextError("Пароль должен содержать хотя бы 3 символа");
+          break;
+        case "name должен содержать хотя бы 3 символа":
+          setTextError("Имя должно содержать хотя бы 3 символа");
+          break;
+        default:
+          setTextError(error.message);
+          break;
+      }
+    }
   }
 
   return (
@@ -40,6 +110,9 @@ function Auth({ isRegistration, setIsAuth }) {
                     name="name"
                     id="formName"
                     placeholder="Имя"
+                    value={formData.name}
+                    onChange={handleChange}
+                    $error={errors.name}
                   />
                 )}
                 <InputAuth
@@ -47,14 +120,25 @@ function Auth({ isRegistration, setIsAuth }) {
                   name="login"
                   id="formLogin"
                   placeholder="Эл. почта"
+                  value={formData.login}
+                  onChange={handleChange}
+                  $error={errors.login}
                 />
                 <InputAuth
                   type="password"
                   name="password"
                   id="formPassword"
                   placeholder="Пароль"
+                  value={formData.password}
+                  onChange={handleChange}
+                  $error={errors.password}
                 />
-                <ButtonEnter id="btnEnter" onClick={handleLogin}>
+                <p style={{ color: "red" }}>{textError}</p>
+                <ButtonEnter
+                  id="btnEnter"
+                  onClick={handleLogin}
+                  disabled={!!textError}
+                >
                   {!isRegistration ? "Войти" : "Зарегистрироваться"}
                 </ButtonEnter>
                 <FooterAuth>

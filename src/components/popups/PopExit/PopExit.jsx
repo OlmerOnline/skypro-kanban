@@ -7,12 +7,15 @@ import {
   PopExitTtlH2,
   SPopExit,
 } from "./PopExit.styled";
+import { clearLocalStorage } from "../../../services/localStorage";
 
 function PopExit({ isShow, setIsAuth }) {
   const navigate = useNavigate();
 
   function handleLogout(event) {
     event.preventDefault();
+
+    clearLocalStorage();
 
     setIsAuth(false);
     navigate("/login");

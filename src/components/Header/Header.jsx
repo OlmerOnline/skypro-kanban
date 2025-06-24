@@ -9,6 +9,7 @@ import {
   SHeader,
 } from "./Header.styled";
 import { Link, useNavigate } from "react-router-dom";
+import { getLocalStorage } from "../../services/localStorage";
 
 function Header() {
   const isLightTheme = true;
@@ -59,7 +60,9 @@ function Header() {
                 Создать новую задачу
               </Link>
             </HeaderBtnMainNew>
-            <HeaderUser onClick={handleUser}>Ivan Ivanov</HeaderUser>
+            <HeaderUser onClick={handleUser}>
+              {getLocalStorage().name}
+            </HeaderUser>
           </HeaderNav>
         </HeaderBlock>
       </Container>

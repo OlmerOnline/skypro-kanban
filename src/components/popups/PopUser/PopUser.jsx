@@ -8,6 +8,7 @@ import {
   PopUserSetThemeInput,
   PopUserSetThemeParagraph,
 } from "./PopUser.styled";
+import { getLocalStorage } from "../../../services/localStorage";
 
 function PopUser({ isShow }) {
   const navigate = useNavigate();
@@ -19,8 +20,8 @@ function PopUser({ isShow }) {
 
   return (
     <HeaderPopUserSet $isShow={isShow} id="user-set-target">
-      <PopUserSetName>Ivan Ivanov</PopUserSetName>
-      <PopUserSetMail>ivan.ivanov@gmail.com</PopUserSetMail>
+      <PopUserSetName>{getLocalStorage().name}</PopUserSetName>
+      <PopUserSetMail>{getLocalStorage().login}</PopUserSetMail>
       <PopUserSetTheme>
         <PopUserSetThemeParagraph>Темная тема</PopUserSetThemeParagraph>
         <PopUserSetThemeInput
