@@ -69,6 +69,7 @@ function PopNewTask({ isShow }) {
         </Block>
       </Container>
     </SPopNewTask>
+
     // <div className="pop-new-card" id="popNewCard">
     //   <div className="pop-new-card__container">
     //     <div className="pop-new-card__block">
