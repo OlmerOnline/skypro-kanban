@@ -12,31 +12,34 @@ import {
 } from "./Calendar.styled";
 import { useEffect, useState } from "react";
 import CalendarCell from "./CalendarCell";
+import { format } from "date-fns";
+
+const MONTHS = [
+  "Январь",
+  "Февраль",
+  "Март",
+  "Апрель",
+  "Май",
+  "Июнь",
+  "Июль",
+  "Август",
+  "Сентябрь",
+  "Октябрь",
+  "Ноябрь",
+  "Декабрь",
+];
 
 function Calendar() {
-  const MONTHS = [
-    "Январь",
-    "Февраль",
-    "Март",
-    "Апрель",
-    "Май",
-    "Июнь",
-    "Июль",
-    "Август",
-    "Сентябрь",
-    "Октябрь",
-    "Ноябрь",
-    "Декабрь",
-  ];
   const currentDate = new Date();
   const [indexMonth, setIndexMonth] = useState(currentDate.getMonth());
   const [year, setYear] = useState(currentDate.getFullYear());
 
-  const [selectedDate, setSelectedDate] = useState("");
+  const [selectedDate, setSelectedDate] = useState(null);
   const [textDeadline, setTextDeadline] = useState("Выберите срок исполнения");
 
   useEffect(() => {
     if (selectedDate) {
+      console.log(selectedDate);
       setTextDeadline(`Срок исполнения: `);
     }
   }, [selectedDate]);
@@ -113,7 +116,9 @@ function Calendar() {
         <div style={{ padding: "0 7px" }}>
           <PeriodText>
             {textDeadline}
-            <span style={{ color: "#000000" }}>{selectedDate}</span>
+            <span style={{ color: "#000000" }}>
+              {selectedDate ? format(selectedDate, "dd.MM.yy") : ""}
+            </span>
             {"."}
           </PeriodText>
         </div>

@@ -12,6 +12,7 @@ import {
   CardTitle,
   SCardsItem,
 } from "./CardsItem.styled";
+import { format } from "date-fns";
 
 function CardsItem({ task }) {
   let color = "";
@@ -76,7 +77,9 @@ function CardsItem({ task }) {
                 </clipPath>
               </defs>
             </svg>
-            <CardDateParagraph>{task.date}</CardDateParagraph>
+            <CardDateParagraph>
+              {format(task.date, "dd.MM.yy")}
+            </CardDateParagraph>
           </CardDate>
         </CardContent>
       </CardsCard>

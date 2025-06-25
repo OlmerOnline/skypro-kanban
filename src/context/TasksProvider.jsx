@@ -3,9 +3,17 @@ import { TasksContext } from "./TasksContext";
 
 function TasksProvider({ children }) {
   const [tasks, setTasks] = useState([]);
+  const [calendarSelectedDate, setCalendarSelectedDate] = useState("");
 
   return (
-    <TasksContext.Provider value={{ tasks, setTasks }}>
+    <TasksContext.Provider
+      value={{
+        tasks,
+        setTasks,
+        calendarSelectedDate,
+        setCalendarSelectedDate,
+      }}
+    >
       {children}
     </TasksContext.Provider>
   );

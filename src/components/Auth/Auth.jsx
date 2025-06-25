@@ -71,7 +71,6 @@ function Auth({ isRegistration }) {
         : await registration(formData);
 
       if (user) {
-        console.log(user);
         updateUser(user);
         navigate("/");
       }

@@ -15,3 +15,19 @@ export async function fetchGetTasks(token) {
     throw new Error(error.message);
   }
 }
+
+export async function fetchAddTask(token, task) {
+  try {
+    const data = await axios.post(URL, task, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "",
+      },
+    });
+
+    return data.data.tasks;
+  } catch (error) {
+    console.log(error.response.data.error);
+    throw new Error(error.message);
+  }
+}

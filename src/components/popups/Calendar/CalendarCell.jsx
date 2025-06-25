@@ -1,5 +1,7 @@
 import { format, getDaysInMonth } from "date-fns";
+import { useContext } from "react";
 import styled from "styled-components";
+import { TasksContext } from "../../../context/TasksContext";
 
 export const Cell = styled.div`
   width: 22px;
@@ -26,6 +28,7 @@ export const Cell = styled.div`
 Cell.displayName = "Cell";
 
 function CalendarCell({ month, year, selectedDate, setSelectedDate }) {
+  let { setCalendarSelectedDate } = useContext(TasksContext);
   const currentDate = new Date();
   const numberOfDays = getDaysInMonth(new Date(year, month));
   const indexFirstDay = new Date(year, month, 1).getDay();
@@ -45,11 +48,8 @@ function CalendarCell({ month, year, selectedDate, setSelectedDate }) {
   }
 
   function handleDeadline(event) {
-    event.preventDefault();
-
-    setSelectedDate(
-      format(new Date(year, month, event.target.textContent), "dd.MM.yy")
-    );
+    setCalendarSelectedDate(new Date(year, month, event.target.textContent));
+    setSelectedDate(new Date(year, month, event.target.textContent));
   }
 
   const components = cells.map((cell, index) => (
