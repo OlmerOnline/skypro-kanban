@@ -3,7 +3,7 @@ import { TasksContext } from "./TasksContext";
 
 function TasksProvider({ children }) {
   const [tasks, setTasks] = useState([]);
-  const [calendarSelectedDate, setCalendarSelectedDate] = useState("");
+  const [calendarSelectedDate, setCalendarSelectedDate] = useState(null);
 
   return (
     <TasksContext.Provider

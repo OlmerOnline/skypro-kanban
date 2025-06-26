@@ -8,7 +8,7 @@ import {
   HeaderUser,
   SHeader,
 } from "./Header.styled";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 
 function Header() {
@@ -25,6 +25,10 @@ function Header() {
 
   function handleLogo() {
     setIsShow(false);
+  }
+
+  function handleNewTask() {
+    navigate("/new-task");
   }
 
   useEffect(() => {
@@ -55,10 +59,8 @@ function Header() {
             </a>
           </HeaderLogo>
           <HeaderNav>
-            <HeaderBtnMainNew id="btnMainNew">
-              <Link to="/new-task" style={{ color: "#ffffff" }}>
-                Создать новую задачу
-              </Link>
+            <HeaderBtnMainNew onClick={handleNewTask}>
+              {"Создать новую задачу"}
             </HeaderBtnMainNew>
             <HeaderUser onClick={handleUser}>{user.name}</HeaderUser>
           </HeaderNav>

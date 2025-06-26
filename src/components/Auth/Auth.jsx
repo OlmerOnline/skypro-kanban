@@ -31,23 +31,27 @@ function Auth({ isRegistration }) {
   const [textError, setTextError] = useState("");
 
   function validate() {
+    let isValid = true;
     const newErrors = VALIDATION_FIELDS;
 
     if (isRegistration && !formData.name.trim()) {
       newErrors.name = true;
+      isValid = false;
       setTextError("Заполните все поля");
     }
     if (!formData.login.trim()) {
       newErrors.login = true;
+      isValid = false;
       setTextError("Заполните все поля");
     }
     if (!formData.password.trim()) {
       newErrors.password = true;
+      isValid = false;
       setTextError("Заполните все поля");
     }
 
     setErrors(newErrors);
-    return !Object.values(newErrors).filter(Boolean).length;
+    return isValid;
   }
 
   function handleChange(event) {
@@ -62,6 +66,7 @@ function Auth({ isRegistration }) {
     event.preventDefault();
 
     if (!validate()) {
+      console.log("валидацию не прошел");
       return;
     }
 

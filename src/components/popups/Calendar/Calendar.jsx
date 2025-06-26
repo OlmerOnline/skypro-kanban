@@ -29,17 +29,16 @@ const MONTHS = [
   "Декабрь",
 ];
 
-function Calendar() {
+function Calendar({ date }) {
   const currentDate = new Date();
   const [indexMonth, setIndexMonth] = useState(currentDate.getMonth());
   const [year, setYear] = useState(currentDate.getFullYear());
 
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(date);
   const [textDeadline, setTextDeadline] = useState("Выберите срок исполнения");
 
   useEffect(() => {
     if (selectedDate) {
-      console.log(selectedDate);
       setTextDeadline(`Срок исполнения: `);
     }
   }, [selectedDate]);

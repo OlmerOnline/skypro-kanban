@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Calendar from "../Calendar/Calendar";
 import {
   Block,
@@ -29,10 +29,15 @@ import {
 } from "./PopTask.styled";
 import { useContext } from "react";
 import { TasksContext } from "../../../context/TasksContext";
+import { fetchDeleteTask } from "../../../services/api";
+import { AuthContext } from "../../../context/AuthContext";
 
 function PopTask({ isShow }) {
-  const { tasks } = useContext(TasksContext);
+  const { tasks, setTasks } = useContext(TasksContext);
+  const { user } = useContext(AuthContext);
   const { id } = useParams();
+  const navigate = useNavigate("");
+
   const task = tasks.find((task) => task._id === id);
   const statuses = [
     "Без статуса",
@@ -42,8 +47,30 @@ function PopTask({ isShow }) {
     "Готово",
   ];
 
+  window.scrollTo(0, 0);
+
+  function handleClose() {
+    navigate("/");
+  }
+
+  async function handleDelete(event) {
+    event.preventDefault();
+
+    try {
+      const data = await fetchDeleteTask(user.token, id);
+
+      if (data) {
+        setTasks(data);
+        navigate("/");
+      }
+    } catch (error) {
+      console.log(error);
+      throw error.message;
+    }
+  }
+
   const components = statuses
-    .filter((status) => status !== task.status)
+    .filter((status) => status !== task?.status)
     .map((status, index) => (
       <StatusTheme key={index} $isHide={true}>
         <StatusThemeText>{status}</StatusThemeText>
@@ -56,9 +83,9 @@ function PopTask({ isShow }) {
         <Block>
           <Content>
             <Header>
-              <Title>{task.title}</Title>
-              <CategoriesTheme $isTop={true} $color={task.topic}>
-                <ThemeText $color={task.topic}>{task.topic}</ThemeText>
+              <Title>{task?.title}</Title>
+              <CategoriesTheme $isTop={true} $color={task?.topic}>
+                <ThemeText $color={task?.topic}>{task?.topic}</ThemeText>
               </CategoriesTheme>
             </Header>
 
@@ -66,7 +93,7 @@ function PopTask({ isShow }) {
               <StatusTitle>Статус</StatusTitle>
               <StatusThemes>
                 <StatusTheme $isHide={false}>
-                  <StatusThemeText>{task.status}</StatusThemeText>
+                  <StatusThemeText>{task?.status}</StatusThemeText>
                 </StatusTheme>
                 {components}
               </StatusThemes>
@@ -77,20 +104,21 @@ function PopTask({ isShow }) {
                 <FormBlock>
                   <FormTitle htmlFor="textArea01">Описание задачи</FormTitle>
                   <FormArea
-                    name="text"
+                    name="description"
                     id="textArea01"
                     placeholder="Введите описание задачи..."
+                    value={task?.description}
                     readOnly
                   />
                 </FormBlock>
               </Form>
-              <Calendar />
+              <Calendar date={task?.date} />
             </Wrap>
 
             <BlockCategoriesBot>
               <CategoriesBotTitle>Категория</CategoriesBotTitle>
-              <CategoriesTheme $isTop={false} $color={task.topic}>
-                <ThemeText $color={task.topic}>{task.topic}</ThemeText>
+              <CategoriesTheme $isTop={false} $color={task?.topic}>
+                <ThemeText $color={task?.topic}>{task?.topic}</ThemeText>
               </CategoriesTheme>
             </BlockCategoriesBot>
 
@@ -99,13 +127,9 @@ function PopTask({ isShow }) {
                 <BtnWhite>
                   <BtnWhiteLink>Редактировать задачу</BtnWhiteLink>
                 </BtnWhite>
-                <BtnWhite>
-                  <BtnWhiteLink>Удалить задачу</BtnWhiteLink>
-                </BtnWhite>
+                <BtnWhite onClick={handleDelete}>Удалить задачу</BtnWhite>
               </div>
-              <BtnBlue>
-                <BtnBlueLink to="/">Закрыть</BtnBlueLink>
-              </BtnBlue>
+              <BtnBlue onClick={handleClose}>Закрыть</BtnBlue>
             </ButtonsBlock>
 
             <ButtonsBlock $isShow={false}>

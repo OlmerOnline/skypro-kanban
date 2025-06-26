@@ -34,7 +34,8 @@ const VALIDATION_FIELDS = {
 
 function PopNewTask({ isShow }) {
   const { user } = useContext(AuthContext);
-  const { setTasks, calendarSelectedDate } = useContext(TasksContext);
+  const { setTasks, calendarSelectedDate, setCalendarSelectedDate } =
+    useContext(TasksContext);
   const navigate = useNavigate("");
 
   const [theme, setTheme] = useState("");
@@ -63,26 +64,35 @@ function PopNewTask({ isShow }) {
 
   function validate() {
     const newError = VALIDATION_FIELDS;
+    let isValid = true;
 
     if (!theme) {
       newError.theme = true;
       setTextError("Выберите категорию задачи");
+      console.log("theme");
+      isValid = false;
     }
     if (!calendarSelectedDate) {
       newError.date = true;
       setTextError("Выберите дату");
+      console.log("date");
+      isValid = false;
     }
     if (!formData.description.trim()) {
       newError.description = true;
       setTextError("Введите описание задачи");
+      console.log("description");
+      isValid = false;
     }
     if (!formData.title.trim()) {
       newError.title = true;
       setTextError("Введите название задачи");
+      console.log("title");
+      isValid = false;
     }
 
     setError(newError);
-    return !Object.values(error).filter(Boolean).length;
+    return isValid;
   }
 
   function handleChange(event) {
@@ -107,6 +117,7 @@ function PopNewTask({ isShow }) {
     event.preventDefault();
 
     if (!validate()) {
+      console.log("валидацию не прошёл");
       return;
     }
 
@@ -118,12 +129,11 @@ function PopNewTask({ isShow }) {
         description: formData.description,
         date: formData.date,
       };
-      console.log(task);
-      console.log(user.token);
       const data = await fetchAddTask(user.token, task);
 
       if (data) {
         setTasks(data);
+        setCalendarSelectedDate(null);
         navigate("/");
       }
     } catch (error) {
@@ -165,7 +175,7 @@ function PopNewTask({ isShow }) {
                   />
                 </FormBlock>
               </Form>
-              <Calendar />
+              <Calendar date={null} />
             </Wrap>
 
             <Categories>

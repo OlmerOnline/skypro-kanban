@@ -27,7 +27,21 @@ export async function fetchAddTask(token, task) {
 
     return data.data.tasks;
   } catch (error) {
-    console.log(error.response.data.error);
+    throw new Error(error.message);
+  }
+}
+
+export async function fetchDeleteTask(token, id) {
+  try {
+    const data = await axios.delete(URL + "/" + id, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return data.data.tasks;
+  } catch (error) {
+    console.log(error);
     throw new Error(error.message);
   }
 }
