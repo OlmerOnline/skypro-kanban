@@ -175,7 +175,7 @@ function PopNewTask({ isShow }) {
                   />
                 </FormBlock>
               </Form>
-              <Calendar date={null} />
+              <Calendar date={null} isActive={true} />
             </Wrap>
 
             <Categories>

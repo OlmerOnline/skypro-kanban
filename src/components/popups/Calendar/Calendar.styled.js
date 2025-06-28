@@ -3,6 +3,7 @@ import styled from "styled-components";
 export const SCalendar = styled.div`
   width: 182px;
   margin-bottom: 20px;
+  pointer-events: ${({ $isActive }) => !$isActive && "none"};
 `;
 SCalendar.displayName = "SCalendar";
 

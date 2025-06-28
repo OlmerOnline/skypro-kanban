@@ -29,7 +29,7 @@ const MONTHS = [
   "Декабрь",
 ];
 
-function Calendar({ date }) {
+function Calendar({ date = null, isActive, isCancel = false }) {
   const currentDate = new Date();
   const [indexMonth, setIndexMonth] = useState(currentDate.getMonth());
   const [year, setYear] = useState(currentDate.getFullYear());
@@ -42,6 +42,13 @@ function Calendar({ date }) {
       setTextDeadline(`Срок исполнения: `);
     }
   }, [selectedDate]);
+
+  useEffect(() => {
+    setSelectedDate(date);
+    setIndexMonth(currentDate.getMonth());
+    setYear(currentDate.getFullYear());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isCancel]);
 
   function handleNextMonth() {
     if (indexMonth < 11) {
@@ -62,7 +69,7 @@ function Calendar({ date }) {
   }
 
   return (
-    <SCalendar>
+    <SCalendar $isActive={isActive}>
       <Title>Даты</Title>
       <div style={{ display: "block" }}>
         <Navigation>

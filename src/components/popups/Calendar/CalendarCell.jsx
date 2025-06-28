@@ -61,7 +61,8 @@ function CalendarCell({ month, year, selectedDate, setSelectedDate }) {
         format(new Date(year, month, cell), "dd.MM.yy")
       }
       $isClick={
-        selectedDate === format(new Date(year, month, cell), "dd.MM.yy")
+        format(selectedDate, "dd.MM.yy") ===
+        format(new Date(year, month, cell), "dd.MM.yy")
       }
       onClick={handleDeadline}
     >

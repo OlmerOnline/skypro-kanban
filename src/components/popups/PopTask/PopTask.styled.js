@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 const title = `
@@ -127,15 +126,18 @@ export const StatusTheme = styled.div`
   padding: 11px 14px 10px;
   margin-right: 7px;
   margin-bottom: 7px;
-  color: ${({ $isHide }) => !$isHide && "#ffffff"};
-  background: ${({ $isHide }) => !$isHide && "#94a6be"};
+  cursor: pointer;
+  color: ${({ $isActive }) => $isActive && "#ffffff"};
+  background: ${({ $isActive }) => $isActive && "#94a6be"};
 `;
+StatusTheme.displayName = "StatusTheme";
 
 export const StatusThemeText = styled.p`
   font-size: 14px;
   line-height: 1;
   letter-spacing: -0.14px;
 `;
+StatusThemeText.displayName = "StatusThemeText";
 
 export const Wrap = styled.div`
   display: flex;
@@ -214,14 +216,6 @@ export const BtnWhite = styled.button`
   }
 `;
 
-export const BtnWhiteLink = styled.a`
-  color: #565eef;
-
-  &:hover {
-    color: #ffffff;
-  }
-`;
-
 export const BtnBlue = styled.button`
   ${button}
   border-radius: 4px;
@@ -233,8 +227,4 @@ export const BtnBlue = styled.button`
   &:hover {
     background-color: #33399b;
   }
-`;
-
-export const BtnBlueLink = styled(Link)`
-  color: #ffffff;
 `;

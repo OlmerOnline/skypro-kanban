@@ -4,9 +4,7 @@ import {
   Block,
   BlockCategoriesBot,
   BtnBlue,
-  BtnBlueLink,
   BtnWhite,
-  BtnWhiteLink,
   ButtonsBlock,
   CategoriesBotTitle,
   CategoriesTheme,
@@ -27,16 +25,25 @@ import {
   Title,
   Wrap,
 } from "./PopTask.styled";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { TasksContext } from "../../../context/TasksContext";
-import { fetchDeleteTask } from "../../../services/api";
+import { fetchDeleteTask, fetchEditTask } from "../../../services/api";
 import { AuthContext } from "../../../context/AuthContext";
 
 function PopTask({ isShow }) {
-  const { tasks, setTasks } = useContext(TasksContext);
+  window.scrollTo(0, 0);
+
+  const { tasks, setTasks, calendarSelectedDate, setCalendarSelectedDate } =
+    useContext(TasksContext);
   const { user } = useContext(AuthContext);
   const { id } = useParams();
   const navigate = useNavigate("");
+
+  const [isGroupEditBtn, setIsGroupEditBtn] = useState(false);
+  const [isReadOnly, setIsReadOnly] = useState(true);
+  const [isHideStatus, setIsHideStatus] = useState(true);
+  const [isActiveCalendar, setIsActiveCalendar] = useState(false);
+  const [isCancel, setIsCancel] = useState(false);
 
   const task = tasks.find((task) => task._id === id);
   const statuses = [
@@ -47,9 +54,20 @@ function PopTask({ isShow }) {
     "Готово",
   ];
 
-  window.scrollTo(0, 0);
+  const [taskDescription, setTaskDescription] = useState(task?.description);
+  const [taskStatus, setTaskStatus] = useState(task?.status);
+  const [taskDate, setTaskDate] = useState(
+    calendarSelectedDate ? calendarSelectedDate : task?.date
+  );
+
+  useEffect(() => {
+    if (calendarSelectedDate) {
+      setTaskDate(calendarSelectedDate);
+    }
+  }, [calendarSelectedDate]);
 
   function handleClose() {
+    setIsCancel(true);
     navigate("/");
   }
 
@@ -64,18 +82,68 @@ function PopTask({ isShow }) {
         navigate("/");
       }
     } catch (error) {
-      console.log(error);
       throw error.message;
     }
   }
 
-  const components = statuses
-    .filter((status) => status !== task?.status)
-    .map((status, index) => (
-      <StatusTheme key={index} $isHide={true}>
-        <StatusThemeText>{status}</StatusThemeText>
-      </StatusTheme>
-    ));
+  function handleEdit() {
+    setIsGroupEditBtn(true);
+    setIsReadOnly(false);
+    setIsHideStatus(false);
+    setIsActiveCalendar(true);
+    setIsCancel(false);
+  }
+
+  function handleCancel() {
+    setIsGroupEditBtn(false);
+    setIsReadOnly(true);
+    setIsHideStatus(true);
+    setIsActiveCalendar(false);
+    setIsCancel(true);
+
+    setTaskDescription(task.description);
+    setTaskStatus(task.status);
+    setTaskDate(task.date);
+
+    setCalendarSelectedDate(null);
+  }
+
+  async function handleSave() {
+    try {
+      const data = await fetchEditTask(user.token, {
+        ...task,
+        description: taskDescription,
+        status: taskStatus,
+        date: taskDate,
+      });
+
+      if (data) {
+        setTasks(data);
+        navigate("/");
+      }
+    } catch (error) {
+      throw error.message;
+    }
+  }
+
+  function handleStatus(event) {
+    setTaskStatus(event.currentTarget.querySelector("p").textContent);
+  }
+
+  function handleChange(event) {
+    setTaskDescription(event.target.value);
+  }
+
+  const components = statuses.map((status, index) => (
+    <StatusTheme
+      key={index}
+      $isHide={taskStatus === status ? false : isHideStatus}
+      $isActive={taskStatus === status}
+      onClick={handleStatus}
+    >
+      <StatusThemeText>{status}</StatusThemeText>{" "}
+    </StatusTheme>
+  ));
 
   return (
     <SPopTask id="popBrowse" $isShow={isShow}>
@@ -91,28 +159,27 @@ function PopTask({ isShow }) {
 
             <Status>
               <StatusTitle>Статус</StatusTitle>
-              <StatusThemes>
-                <StatusTheme $isHide={false}>
-                  <StatusThemeText>{task?.status}</StatusThemeText>
-                </StatusTheme>
-                {components}
-              </StatusThemes>
+              <StatusThemes>{components}</StatusThemes>
             </Status>
 
             <Wrap>
-              <Form id="formBrowseCard" action="#">
+              <Form>
                 <FormBlock>
                   <FormTitle htmlFor="textArea01">Описание задачи</FormTitle>
                   <FormArea
                     name="description"
-                    id="textArea01"
                     placeholder="Введите описание задачи..."
-                    value={task?.description}
-                    readOnly
+                    value={taskDescription}
+                    onChange={handleChange}
+                    readOnly={isReadOnly}
                   />
                 </FormBlock>
               </Form>
-              <Calendar date={task?.date} />
+              <Calendar
+                date={taskDate}
+                isActive={isActiveCalendar}
+                isCancel={isCancel}
+              />
             </Wrap>
 
             <BlockCategoriesBot>
@@ -122,31 +189,23 @@ function PopTask({ isShow }) {
               </CategoriesTheme>
             </BlockCategoriesBot>
 
-            <ButtonsBlock $isShow={true}>
+            <ButtonsBlock $isShow={!isGroupEditBtn}>
               <div>
-                <BtnWhite>
-                  <BtnWhiteLink>Редактировать задачу</BtnWhiteLink>
-                </BtnWhite>
+                <BtnWhite onClick={handleEdit}>Редактировать задачу</BtnWhite>
                 <BtnWhite onClick={handleDelete}>Удалить задачу</BtnWhite>
               </div>
               <BtnBlue onClick={handleClose}>Закрыть</BtnBlue>
             </ButtonsBlock>
 
-            <ButtonsBlock $isShow={false}>
+            <ButtonsBlock $isShow={isGroupEditBtn}>
               <div>
-                <BtnBlue style={{ marginRight: "8px" }}>
-                  <BtnBlueLink>Сохранить</BtnBlueLink>
+                <BtnBlue style={{ marginRight: "8px" }} onClick={handleSave}>
+                  Сохранить
                 </BtnBlue>
-                <BtnWhite>
-                  <BtnWhiteLink>Отменить</BtnWhiteLink>
-                </BtnWhite>
-                <BtnWhite>
-                  <BtnWhiteLink>Удалить задачу</BtnWhiteLink>
-                </BtnWhite>
+                <BtnWhite onClick={handleCancel}>Отменить</BtnWhite>
+                <BtnWhite onClick={handleDelete}>Удалить задачу</BtnWhite>
               </div>
-              <BtnBlue>
-                <BtnBlueLink to="/">Закрыть</BtnBlueLink>
-              </BtnBlue>
+              <BtnBlue onClick={handleClose}>Закрыть</BtnBlue>
             </ButtonsBlock>
           </Content>
         </Block>
