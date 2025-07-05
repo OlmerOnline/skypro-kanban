@@ -8,34 +8,30 @@ import NewTaskPage from "../../pages/NewTaskPage";
 import TaskPage from "../../pages/TaskPage";
 import NotFoundPage from "../../pages/NotFoundPage";
 import PrivateRoute from "../PrivateRoute/PrivateRoute";
-import { useState } from "react";
-import { getLocalStorage } from "../../services/localStorage";
+import TasksProvider from "../../context/TasksProvider";
 
 function AppRoutes() {
-  const [isAuth, setIsAuth] = useState(!!getLocalStorage());
-
   return (
     <Routes>
-      <Route element={<PrivateRoute isAuth={isAuth} />}>
-        <Route path="/" element={<MainPage />}>
+      <Route element={<PrivateRoute />}>
+        <Route
+          path="/"
+          element={
+            <TasksProvider>
+              <MainPage />
+            </TasksProvider>
+          }
+        >
           <Route path="/user" element={<UserPage isShow={true} />} />
-          <Route
-            path="/exit"
-            element={<ExitPage isShow={true} setIsAuth={setIsAuth} />}
-          />
+          <Route path="/exit" element={<ExitPage isShow={true} />} />
           <Route path="/new-task" element={<NewTaskPage isShow={true} />} />
           <Route path="/task/:id" element={<TaskPage isShow={true} />} />
         </Route>
       </Route>
-      <Route
-        path="/login"
-        element={<LoginPage isRegistration={false} setIsAuth={setIsAuth} />}
-      />
+      <Route path="/login" element={<LoginPage isRegistration={false} />} />
       <Route
         path="/registration"
-        element={
-          <RegistrationPage isRegistration={true} setIsAuth={setIsAuth} />
-        }
+        element={<RegistrationPage isRegistration={true} />}
       />
       <Route path="*" element={<NotFoundPage />} />
     </Routes>

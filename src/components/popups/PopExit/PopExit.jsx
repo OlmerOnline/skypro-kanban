@@ -7,17 +7,17 @@ import {
   PopExitTtlH2,
   SPopExit,
 } from "./PopExit.styled";
-import { clearLocalStorage } from "../../../services/localStorage";
+import { useContext } from "react";
+import { AuthContext } from "../../../context/AuthContext";
 
-function PopExit({ isShow, setIsAuth }) {
+function PopExit({ isShow }) {
   const navigate = useNavigate();
+  const { updateUser } = useContext(AuthContext);
 
   function handleLogout(event) {
     event.preventDefault();
 
-    clearLocalStorage();
-
-    setIsAuth(false);
+    updateUser(null);
     navigate("/login");
   }
 

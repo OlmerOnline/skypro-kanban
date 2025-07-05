@@ -1,3 +1,4 @@
+import { useContext, useEffect, useState } from "react";
 import Calendar from "../Calendar/Calendar.jsx";
 import {
   Block,
@@ -19,8 +20,127 @@ import {
   Title,
   Wrap,
 } from "./PopNewTask.styled.js";
+import { TasksContext } from "../../../context/TasksContext.jsx";
+import { fetchAddTask } from "../../../services/api.js";
+import { AuthContext } from "../../../context/AuthContext.jsx";
+import { useNavigate } from "react-router-dom";
+
+const VALIDATION_FIELDS = {
+  title: false,
+  description: false,
+  theme: false,
+  date: false,
+};
 
 function PopNewTask({ isShow }) {
+  const { user } = useContext(AuthContext);
+  const { setTasks, calendarSelectedDate, setCalendarSelectedDate } =
+    useContext(TasksContext);
+  const navigate = useNavigate("");
+
+  const [theme, setTheme] = useState("");
+  const [formData, setFormData] = useState({
+    title: "",
+    description: "",
+    theme: "",
+    date: "",
+  });
+  const [error, setError] = useState(VALIDATION_FIELDS);
+  const [textError, setTextError] = useState("");
+
+  useEffect(() => {
+    setFormData({ ...formData, theme: theme });
+    setError({ ...error, theme: false });
+    setTextError("");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [theme]);
+
+  useEffect(() => {
+    setFormData({ ...formData, date: calendarSelectedDate });
+    setError({ ...error, date: false });
+    setTextError("");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [calendarSelectedDate]);
+
+  function validate() {
+    const newError = VALIDATION_FIELDS;
+    let isValid = true;
+
+    if (!theme) {
+      newError.theme = true;
+      setTextError("Выберите категорию задачи");
+      console.log("theme");
+      isValid = false;
+    }
+    if (!calendarSelectedDate) {
+      newError.date = true;
+      setTextError("Выберите дату");
+      console.log("date");
+      isValid = false;
+    }
+    if (!formData.description.trim()) {
+      newError.description = true;
+      setTextError("Введите описание задачи");
+      console.log("description");
+      isValid = false;
+    }
+    if (!formData.title.trim()) {
+      newError.title = true;
+      setTextError("Введите название задачи");
+      console.log("title");
+      isValid = false;
+    }
+
+    setError(newError);
+    return isValid;
+  }
+
+  function handleChange(event) {
+    const { name, value } = event.target;
+
+    setFormData({ ...formData, [name]: value });
+    setError({ ...error, [name]: false });
+    setTextError("");
+  }
+
+  function handleTheme(event) {
+    if (!theme) {
+      setTheme(event.currentTarget.querySelector("p").textContent);
+    } else {
+      theme === event.currentTarget.querySelector("p").textContent
+        ? setTheme("")
+        : setTheme(event.currentTarget.querySelector("p").textContent);
+    }
+  }
+
+  async function handleCreateTask(event) {
+    event.preventDefault();
+
+    if (!validate()) {
+      console.log("валидацию не прошёл");
+      return;
+    }
+
+    try {
+      const task = {
+        title: formData.title,
+        topic: formData.theme,
+        status: "Без статуса",
+        description: formData.description,
+        date: formData.date,
+      };
+      const data = await fetchAddTask(user.token, task);
+
+      if (data) {
+        setTasks(data);
+        setCalendarSelectedDate(null);
+        navigate("/");
+      }
+    } catch (error) {
+      throw error.message;
+    }
+  }
+
   return (
     <SPopNewTask id="popNewCard" $isShow={isShow}>
       <Container>
@@ -28,47 +148,73 @@ function PopNewTask({ isShow }) {
           <Content>
             <Title>Создание задачи</Title>
             <CloseBtn to="/">&#10006;</CloseBtn>
+
             <Wrap>
               <Form id="formNewTask">
                 <FormBlock>
                   <FormTitle htmlFor="formTitle">Название задачи</FormTitle>
                   <FormInput
                     type="text"
-                    name="name"
+                    name="title"
                     id="formTitle"
                     placeholder="Введите название задачи..."
+                    onChange={handleChange}
+                    value={formData.title}
+                    $error={error.title}
                   />
                 </FormBlock>
                 <FormBlock>
                   <FormTitle htmlFor="textArea">Описание задачи</FormTitle>
                   <FormArea
-                    name="text"
+                    name="description"
                     id="textArea"
                     placeholder="Введите описание задачи..."
+                    onChange={handleChange}
+                    value={formData.description}
+                    $error={error.description}
                   />
                 </FormBlock>
               </Form>
-              <Calendar />
+              <Calendar date={null} isActive={true} />
             </Wrap>
+
             <Categories>
               <CategoriesTitle>Категория</CategoriesTitle>
               <CategoriesThemes>
-                <Theme $color="orange" $isActive={true}>
+                <Theme
+                  $color="orange"
+                  $isActive={theme === "Web Design"}
+                  onClick={handleTheme}
+                >
                   <ThemeText $color="orange">Web Design</ThemeText>
                 </Theme>
-                <Theme $color="green">
+                <Theme
+                  $color="green"
+                  $isActive={theme === "Research"}
+                  onClick={handleTheme}
+                >
                   <ThemeText $color="green">Research</ThemeText>
                 </Theme>
-                <Theme $color="purple">
+                <Theme
+                  $color="purple"
+                  $isActive={theme === "Copywriting"}
+                  onClick={handleTheme}
+                >
                   <ThemeText $color="purple">Copywriting</ThemeText>
                 </Theme>
               </CategoriesThemes>
             </Categories>
-            <CreateNewTaskBtn id="btnCreate">Создать задачу</CreateNewTaskBtn>
+
+            <div style={{ color: "red" }}>{textError}</div>
+
+            <CreateNewTaskBtn id="btnCreate" onClick={handleCreateTask}>
+              Создать задачу
+            </CreateNewTaskBtn>
           </Content>
         </Block>
       </Container>
     </SPopNewTask>
+
     // <div className="pop-new-card" id="popNewCard">
     //   <div className="pop-new-card__container">
     //     <div className="pop-new-card__block">

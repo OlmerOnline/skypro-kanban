@@ -1,7 +1,6 @@
 import {
   Action,
   CalendarCells,
-  Cell,
   DaysNames,
   Month,
   Name,
@@ -11,17 +10,74 @@ import {
   SCalendar,
   Title,
 } from "./Calendar.styled";
+import { useEffect, useState } from "react";
+import CalendarCell from "./CalendarCell";
+import { format } from "date-fns";
 
-function Calendar() {
+const MONTHS = [
+  "Январь",
+  "Февраль",
+  "Март",
+  "Апрель",
+  "Май",
+  "Июнь",
+  "Июль",
+  "Август",
+  "Сентябрь",
+  "Октябрь",
+  "Ноябрь",
+  "Декабрь",
+];
+
+function Calendar({ date = null, isActive, isCancel = false }) {
+  const currentDate = new Date();
+  const [indexMonth, setIndexMonth] = useState(currentDate.getMonth());
+  const [year, setYear] = useState(currentDate.getFullYear());
+
+  const [selectedDate, setSelectedDate] = useState(date);
+  const [textDeadline, setTextDeadline] = useState("Выберите срок исполнения");
+
+  useEffect(() => {
+    if (selectedDate) {
+      setTextDeadline(`Срок исполнения: `);
+    }
+  }, [selectedDate]);
+
+  useEffect(() => {
+    setSelectedDate(date);
+    setIndexMonth(currentDate.getMonth());
+    setYear(currentDate.getFullYear());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isCancel]);
+
+  function handleNextMonth() {
+    if (indexMonth < 11) {
+      setIndexMonth(indexMonth + 1);
+    } else {
+      setIndexMonth(0);
+      setYear(year + 1);
+    }
+  }
+
+  function handlePrevMonth() {
+    if (indexMonth > 0) {
+      setIndexMonth(indexMonth - 1);
+    } else {
+      setIndexMonth(11);
+      setYear(year - 1);
+    }
+  }
+
   return (
-    <SCalendar>
+    <SCalendar $isActive={isActive}>
       <Title>Даты</Title>
       <div style={{ display: "block" }}>
         <Navigation>
-          <Month>Сентябрь 2023</Month>
+          <Month>{`${MONTHS[indexMonth]} ${year}`}</Month>
           <NavigationActions>
             <Action data-action="prev">
               <svg
+                onClick={handlePrevMonth}
                 xmlns="http://www.w3.org/2000/svg"
                 width="6"
                 height="11"
@@ -32,6 +88,7 @@ function Calendar() {
             </Action>
             <Action data-action="next">
               <svg
+                onClick={handleNextMonth}
                 xmlns="http://www.w3.org/2000/svg"
                 width="6"
                 height="11"
@@ -53,55 +110,27 @@ function Calendar() {
             <Name>{"вс"}</Name>
           </DaysNames>
           <CalendarCells>
-            <Cell $isOpacity={true}>{"28"}</Cell>
-            <Cell $isOpacity={true}>{"29"}</Cell>
-            <Cell $isOpacity={true}>{"30"}</Cell>
-            <Cell $isOpacity={true}>{"31"}</Cell>
-            <Cell>{"1"}</Cell>
-            <Cell>{"2"}</Cell>
-            <Cell>{"3"}</Cell>
-
-            <Cell>{"4"}</Cell>
-            <Cell>{"5"}</Cell>
-            <Cell>{"6"}</Cell>
-            <Cell>{"7"}</Cell>
-            <Cell>{"8"}</Cell>
-            <Cell>{"9"}</Cell>
-            <Cell>{"10"}</Cell>
-
-            <Cell>{"11"}</Cell>
-            <Cell>{"12"}</Cell>
-            <Cell>{"13"}</Cell>
-            <Cell>{"14"}</Cell>
-            <Cell>{"15"}</Cell>
-            <Cell>{"16"}</Cell>
-            <Cell>{"17"}</Cell>
-
-            <Cell>{"18"}</Cell>
-            <Cell>{"19"}</Cell>
-            <Cell>{"20"}</Cell>
-            <Cell>{"21"}</Cell>
-            <Cell>{"22"}</Cell>
-            <Cell>{"23"}</Cell>
-            <Cell>{"23"}</Cell>
-
-            <Cell>{"25"}</Cell>
-            <Cell>{"26"}</Cell>
-            <Cell>{"27"}</Cell>
-            <Cell>{"28"}</Cell>
-            <Cell>{"29"}</Cell>
-            <Cell>{"30"}</Cell>
-            <Cell $isOpacity={true}>{"1"}</Cell>
+            <CalendarCell
+              month={indexMonth}
+              year={year}
+              selectedDate={selectedDate}
+              setSelectedDate={setSelectedDate}
+            />
           </CalendarCells>
         </div>
         <input type="hidden" id="datepick_value" value="08.09.2023" />
         <div style={{ padding: "0 7px" }}>
           <PeriodText>
-            Выберите срок исполнения <span style={{ color: "#000000" }}></span>.
+            {textDeadline}
+            <span style={{ color: "#000000" }}>
+              {selectedDate ? format(selectedDate, "dd.MM.yy") : ""}
+            </span>
+            {"."}
           </PeriodText>
         </div>
       </div>
     </SCalendar>
+
     // <div className="pop-new-card__calendar calendar">
     //   <p className="calendar__ttl subttl">Даты</p>
     //   <div className="calendar__block">

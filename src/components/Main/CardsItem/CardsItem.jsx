@@ -12,11 +12,12 @@ import {
   CardTitle,
   SCardsItem,
 } from "./CardsItem.styled";
+import { format } from "date-fns";
 
-function CardsItem({ card }) {
+function CardsItem({ task }) {
   let color = "";
 
-  switch (card.topic) {
+  switch (task.topic) {
     case "Web Design":
       color = "orange";
       break;
@@ -33,9 +34,9 @@ function CardsItem({ card }) {
       <CardsCard>
         <CardGroup>
           <CardTheme $color={color}>
-            <CardThemeParagraph $color={color}>{card.topic}</CardThemeParagraph>
+            <CardThemeParagraph $color={color}>{task.topic}</CardThemeParagraph>
           </CardTheme>
-          <Link to={"/task/" + card._id}>
+          <Link to={"/task/" + task._id}>
             <CardBtn>
               <CardBtnDiv />
               <CardBtnDiv />
@@ -45,7 +46,7 @@ function CardsItem({ card }) {
         </CardGroup>
         <CardContent>
           <a href="" target="_blank">
-            <CardTitle>{card.title}</CardTitle>
+            <CardTitle>{task.title}</CardTitle>
           </a>
           <CardDate>
             <svg
@@ -76,7 +77,9 @@ function CardsItem({ card }) {
                 </clipPath>
               </defs>
             </svg>
-            <CardDateParagraph>{card.date}</CardDateParagraph>
+            <CardDateParagraph>
+              {format(task.date, "dd.MM.yy")}
+            </CardDateParagraph>
           </CardDate>
         </CardContent>
       </CardsCard>

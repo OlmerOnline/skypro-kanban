@@ -1,24 +1,25 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Column from "./Column/Column";
 import { Container, MainBlock, MainContent, SMain } from "./Main.styled";
 import Loading from "./Loading";
 import { Outlet } from "react-router-dom";
-import { fetchGetCards } from "../../services/api";
-import { getLocalStorage } from "../../services/localStorage";
+import { fetchGetTasks } from "../../services/api";
+import { AuthContext } from "../../context/AuthContext";
+import { TasksContext } from "../../context/TasksContext";
 
 function Main() {
+  const { user } = useContext(AuthContext);
+  const { tasks, setTasks } = useContext(TasksContext);
   const [isLoading, setIsLoading] = useState(false);
-  const [cards, setCards] = useState([]);
   let statusList = [];
-  const token = getLocalStorage().token;
 
-  async function getCards() {
+  async function getTasks() {
     try {
       setIsLoading(true);
-      const data = await fetchGetCards(token);
+      const data = await fetchGetTasks(user.token);
 
       if (data) {
-        setCards(data);
+        setTasks(data);
       }
     } catch (error) {
       throw error.message;
@@ -28,17 +29,18 @@ function Main() {
   }
 
   useEffect(() => {
-    getCards();
+    getTasks();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  for (const card of cards) {
-    if (!statusList.includes(card.status)) {
-      statusList.push(card.status);
+  for (const task of tasks) {
+    if (!statusList.includes(task.status)) {
+      statusList.push(task.status);
     }
   }
 
   const components = statusList.map((status, index) => (
-    <Column key={index} status={status} cards={cards} />
+    <Column key={index} status={status} />
   ));
 
   return (

@@ -1,12 +1,10 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Calendar from "../Calendar/Calendar";
 import {
   Block,
   BlockCategoriesBot,
   BtnBlue,
-  BtnBlueLink,
   BtnWhite,
-  BtnWhiteLink,
   ButtonsBlock,
   CategoriesBotTitle,
   CategoriesTheme,
@@ -27,11 +25,27 @@ import {
   Title,
   Wrap,
 } from "./PopTask.styled";
-import { cards } from "../../../../data";
+import { useContext, useEffect, useState } from "react";
+import { TasksContext } from "../../../context/TasksContext";
+import { fetchDeleteTask, fetchEditTask } from "../../../services/api";
+import { AuthContext } from "../../../context/AuthContext";
 
 function PopTask({ isShow }) {
+  window.scrollTo(0, 0);
+
+  const { tasks, setTasks, calendarSelectedDate, setCalendarSelectedDate } =
+    useContext(TasksContext);
+  const { user } = useContext(AuthContext);
   const { id } = useParams();
-  const card = cards.find((card) => card.id === id);
+  const navigate = useNavigate("");
+
+  const [isGroupEditBtn, setIsGroupEditBtn] = useState(false);
+  const [isReadOnly, setIsReadOnly] = useState(true);
+  const [isHideStatus, setIsHideStatus] = useState(true);
+  const [isActiveCalendar, setIsActiveCalendar] = useState(false);
+  const [isCancel, setIsCancel] = useState(false);
+
+  const task = tasks.find((task) => task._id === id);
   const statuses = [
     "Без статуса",
     "Нужно сделать",
@@ -40,13 +54,96 @@ function PopTask({ isShow }) {
     "Готово",
   ];
 
-  const components = statuses
-    .filter((status) => status !== card.status)
-    .map((status, index) => (
-      <StatusTheme key={index} $isHide={true}>
-        <StatusThemeText>{status}</StatusThemeText>
-      </StatusTheme>
-    ));
+  const [taskDescription, setTaskDescription] = useState(task?.description);
+  const [taskStatus, setTaskStatus] = useState(task?.status);
+  const [taskDate, setTaskDate] = useState(
+    calendarSelectedDate ? calendarSelectedDate : task?.date
+  );
+
+  useEffect(() => {
+    if (calendarSelectedDate) {
+      setTaskDate(calendarSelectedDate);
+    }
+  }, [calendarSelectedDate]);
+
+  function handleClose() {
+    setIsCancel(true);
+    navigate("/");
+  }
+
+  async function handleDelete(event) {
+    event.preventDefault();
+
+    try {
+      const data = await fetchDeleteTask(user.token, id);
+
+      if (data) {
+        setTasks(data);
+        navigate("/");
+      }
+    } catch (error) {
+      throw error.message;
+    }
+  }
+
+  function handleEdit() {
+    setIsGroupEditBtn(true);
+    setIsReadOnly(false);
+    setIsHideStatus(false);
+    setIsActiveCalendar(true);
+    setIsCancel(false);
+  }
+
+  function handleCancel() {
+    setIsGroupEditBtn(false);
+    setIsReadOnly(true);
+    setIsHideStatus(true);
+    setIsActiveCalendar(false);
+    setIsCancel(true);
+
+    setTaskDescription(task.description);
+    setTaskStatus(task.status);
+    setTaskDate(task.date);
+
+    setCalendarSelectedDate(null);
+  }
+
+  async function handleSave() {
+    try {
+      const data = await fetchEditTask(user.token, {
+        ...task,
+        description: taskDescription,
+        status: taskStatus,
+        date: taskDate,
+      });
+
+      if (data) {
+        setTasks(data);
+        navigate("/");
+      }
+    } catch (error) {
+      throw error.message;
+    }
+  }
+
+  function handleStatus(event) {
+    setTaskStatus(event.currentTarget.querySelector("p").textContent);
+  }
+
+  function handleChange(event) {
+    setTaskDescription(event.target.value);
+  }
+
+  const components = statuses.map((status, index) => (
+    <StatusTheme
+      key={index}
+      $isHide={taskStatus === status ? false : isHideStatus}
+      $isActive={taskStatus === status}
+      onClick={handleStatus}
+    >
+      <StatusThemeText>{status}</StatusThemeText>{" "}
+    </StatusTheme>
+  ));
 
   return (
     <SPopTask id="popBrowse" $isShow={isShow}>
@@ -54,73 +151,61 @@ function PopTask({ isShow }) {
         <Block>
           <Content>
             <Header>
-              <Title>Название задачи</Title>
-              <CategoriesTheme $isTop={true} $color={card.topic}>
-                <ThemeText $color={card.topic}>{card.topic}</ThemeText>
+              <Title>{task?.title}</Title>
+              <CategoriesTheme $isTop={true} $color={task?.topic}>
+                <ThemeText $color={task?.topic}>{task?.topic}</ThemeText>
               </CategoriesTheme>
             </Header>
 
             <Status>
               <StatusTitle>Статус</StatusTitle>
-              <StatusThemes>
-                <StatusTheme $isHide={false}>
-                  <StatusThemeText>{card.status}</StatusThemeText>
-                </StatusTheme>
-                {components}
-              </StatusThemes>
+              <StatusThemes>{components}</StatusThemes>
             </Status>
 
             <Wrap>
-              <Form id="formBrowseCard" action="#">
+              <Form>
                 <FormBlock>
                   <FormTitle htmlFor="textArea01">Описание задачи</FormTitle>
                   <FormArea
-                    name="text"
-                    id="textArea01"
+                    name="description"
                     placeholder="Введите описание задачи..."
-                    readOnly
+                    value={taskDescription}
+                    onChange={handleChange}
+                    readOnly={isReadOnly}
                   />
                 </FormBlock>
               </Form>
-              <Calendar />
+              <Calendar
+                date={taskDate}
+                isActive={isActiveCalendar}
+                isCancel={isCancel}
+              />
             </Wrap>
 
             <BlockCategoriesBot>
               <CategoriesBotTitle>Категория</CategoriesBotTitle>
-              <CategoriesTheme $isTop={false} $color={card.topic}>
-                <ThemeText $color={card.topic}>{card.topic}</ThemeText>
+              <CategoriesTheme $isTop={false} $color={task?.topic}>
+                <ThemeText $color={task?.topic}>{task?.topic}</ThemeText>
               </CategoriesTheme>
             </BlockCategoriesBot>
 
-            <ButtonsBlock $isShow={true}>
+            <ButtonsBlock $isShow={!isGroupEditBtn}>
               <div>
-                <BtnWhite>
-                  <BtnWhiteLink>Редактировать задачу</BtnWhiteLink>
-                </BtnWhite>
-                <BtnWhite>
-                  <BtnWhiteLink>Удалить задачу</BtnWhiteLink>
-                </BtnWhite>
+                <BtnWhite onClick={handleEdit}>Редактировать задачу</BtnWhite>
+                <BtnWhite onClick={handleDelete}>Удалить задачу</BtnWhite>
               </div>
-              <BtnBlue>
-                <BtnBlueLink to="/">Закрыть</BtnBlueLink>
-              </BtnBlue>
+              <BtnBlue onClick={handleClose}>Закрыть</BtnBlue>
             </ButtonsBlock>
 
-            <ButtonsBlock $isShow={false}>
+            <ButtonsBlock $isShow={isGroupEditBtn}>
               <div>
-                <BtnBlue style={{ marginRight: "8px" }}>
-                  <BtnBlueLink>Сохранить</BtnBlueLink>
+                <BtnBlue style={{ marginRight: "8px" }} onClick={handleSave}>
+                  Сохранить
                 </BtnBlue>
-                <BtnWhite>
-                  <BtnWhiteLink>Отменить</BtnWhiteLink>
-                </BtnWhite>
-                <BtnWhite>
-                  <BtnWhiteLink>Удалить задачу</BtnWhiteLink>
-                </BtnWhite>
+                <BtnWhite onClick={handleCancel}>Отменить</BtnWhite>
+                <BtnWhite onClick={handleDelete}>Удалить задачу</BtnWhite>
               </div>
-              <BtnBlue>
-                <BtnBlueLink to="/">Закрыть</BtnBlueLink>
-              </BtnBlue>
+              <BtnBlue onClick={handleClose}>Закрыть</BtnBlue>
             </ButtonsBlock>
           </Content>
         </Block>

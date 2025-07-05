@@ -13,13 +13,14 @@ import GlobalStyle, {
   Wrapper,
 } from "./Auth.styled";
 import { login, registration } from "../../services/auth";
-import { setLocalStorage } from "../../services/localStorage";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { AuthContext } from "../../context/AuthContext";
 
 const VALIDATION_FIELDS = { name: false, login: false, password: false };
 
-function Auth({ isRegistration, setIsAuth }) {
+function Auth({ isRegistration }) {
   const navigate = useNavigate();
+  const { updateUser } = useContext(AuthContext);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -30,23 +31,27 @@ function Auth({ isRegistration, setIsAuth }) {
   const [textError, setTextError] = useState("");
 
   function validate() {
+    let isValid = true;
     const newErrors = VALIDATION_FIELDS;
 
     if (isRegistration && !formData.name.trim()) {
       newErrors.name = true;
+      isValid = false;
       setTextError("Заполните все поля");
     }
     if (!formData.login.trim()) {
       newErrors.login = true;
+      isValid = false;
       setTextError("Заполните все поля");
     }
     if (!formData.password.trim()) {
       newErrors.password = true;
+      isValid = false;
       setTextError("Заполните все поля");
     }
 
     setErrors(newErrors);
-    return !Object.values(newErrors).filter(Boolean).length;
+    return isValid;
   }
 
   function handleChange(event) {
@@ -61,6 +66,7 @@ function Auth({ isRegistration, setIsAuth }) {
     event.preventDefault();
 
     if (!validate()) {
+      console.log("валидацию не прошел");
       return;
     }
 
@@ -70,12 +76,11 @@ function Auth({ isRegistration, setIsAuth }) {
         : await registration(formData);
 
       if (user) {
-        console.log(user);
-        setLocalStorage(user);
-        setIsAuth(true);
+        updateUser(user);
         navigate("/");
       }
     } catch (error) {
+      console.log(error);
       switch (error.message) {
         case "login должен содержать хотя бы 3 символа":
           setTextError("Логин должен содержать хотя бы 3 символа");

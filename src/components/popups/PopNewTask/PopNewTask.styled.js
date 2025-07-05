@@ -175,10 +175,9 @@ export const Theme = styled.div`
   padding: 8px 20px;
   border-radius: 24px;
   margin-right: 7px;
-  opacity: 0.4;
+  cursor: pointer;
+  opacity: ${({ $isActive }) => ($isActive ? 1 : 0.4)}; //0.4;
   background-color: ${({ $color }) => colors[$color].bg};
-
-  opacity: ${({ $isActive }) => $isActive && "1 !important"};
 `;
 Theme.displayName = "Theme";
 
