@@ -9,6 +9,8 @@ import TaskPage from "../../pages/TaskPage";
 import NotFoundPage from "../../pages/NotFoundPage";
 import PrivateRoute from "../PrivateRoute/PrivateRoute";
 import TasksProvider from "../../context/TasksProvider";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
 function AppRoutes() {
   return (
@@ -17,9 +19,11 @@ function AppRoutes() {
         <Route
           path="/"
           element={
-            <TasksProvider>
-              <MainPage />
-            </TasksProvider>
+            <DndProvider backend={HTML5Backend}>
+              <TasksProvider>
+                <MainPage />
+              </TasksProvider>
+            </DndProvider>
           }
         >
           <Route path="/user" element={<UserPage isShow={true} />} />

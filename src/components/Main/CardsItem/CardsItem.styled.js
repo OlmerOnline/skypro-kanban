@@ -31,13 +31,16 @@ export const SCardsItem = styled.div`
   animation-name: ${cardAnimation};
   animation-duration: 500ms;
   animation-timing-function: linear;
+  opacity: ${({ $isDragging }) => ($isDragging ? 0.3 : 1)};
 `;
 
 export const CardsCard = styled.div`
   width: 220px;
   height: 130px;
-  background-color: #ffffff;
+  background-color: ${({ $isDragging }) =>
+    $isDragging ? "transparent" : "#ffffff"};
   border-radius: 10px;
+  border: ${({ $isDragging }) => ($isDragging ? "1px dashed #94A6BE" : "none")};
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -49,7 +52,7 @@ export const CardGroup = styled.div`
   width: 100%;
   height: 20px;
   margin-bottom: 12px;
-  display: flex;
+  display: ${({ $isDragging }) => ($isDragging ? "none" : "flex")};
   align-items: center;
   justify-content: space-between;
 `;
@@ -87,7 +90,7 @@ export const CardBtnDiv = styled.div`
 
 export const CardContent = styled.div`
   height: 64px;
-  display: flex;
+  display: ${({ $isDragging }) => ($isDragging ? "none" : "flex")};
   flex-direction: column;
   align-items: flex-start;
   justify-content: space-between;

@@ -9,9 +9,17 @@ import { TasksContext } from "../../context/TasksContext";
 
 function Main() {
   const { user } = useContext(AuthContext);
-  const { tasks, setTasks } = useContext(TasksContext);
+  const { setTasks } = useContext(TasksContext);
+
   const [isLoading, setIsLoading] = useState(false);
-  let statusList = [];
+
+  const STATUSES = [
+    "Без статуса",
+    "Нужно сделать",
+    "В работе",
+    "Тестирование",
+    "Готово",
+  ];
 
   async function getTasks() {
     try {
@@ -33,13 +41,7 @@ function Main() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  for (const task of tasks) {
-    if (!statusList.includes(task.status)) {
-      statusList.push(task.status);
-    }
-  }
-
-  const components = statusList.map((status, index) => (
+  const components = STATUSES.map((status, index) => (
     <Column key={index} status={status} />
   ));
 

@@ -4,6 +4,7 @@ import { TasksContext } from "./TasksContext";
 function TasksProvider({ children }) {
   const [tasks, setTasks] = useState([]);
   const [calendarSelectedDate, setCalendarSelectedDate] = useState(null);
+  const [dragStatus, setDragStatus] = useState("");
 
   return (
     <TasksContext.Provider
@@ -12,6 +13,8 @@ function TasksProvider({ children }) {
         setTasks,
         calendarSelectedDate,
         setCalendarSelectedDate,
+        dragStatus,
+        setDragStatus,
       }}
     >
       {children}

@@ -13,11 +13,30 @@ import {
   SCardsItem,
 } from "./CardsItem.styled";
 import { format } from "date-fns";
+import { useDrag } from "react-dnd";
+import { useContext } from "react";
+import { TasksContext } from "../../../context/TasksContext";
 
 function CardsItem({ task }) {
+  const { setDragStatus } = useContext(TasksContext);
+
+  const [{ isDragging }, dragRef] = useDrag(() => ({
+    type: "card",
+    item: () => {
+      setDragStatus(task.status);
+      return { task: task };
+    },
+    end: () => {
+      setDragStatus("");
+    },
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
+  }));
+
   let color = "";
 
-  switch (task.topic) {
+  switch (task?.topic) {
     case "Web Design":
       color = "orange";
       break;
@@ -30,13 +49,15 @@ function CardsItem({ task }) {
   }
 
   return (
-    <SCardsItem>
-      <CardsCard>
-        <CardGroup>
+    <SCardsItem ref={dragRef}>
+      <CardsCard $isDragging={isDragging}>
+        <CardGroup $isDragging={isDragging}>
           <CardTheme $color={color}>
-            <CardThemeParagraph $color={color}>{task.topic}</CardThemeParagraph>
+            <CardThemeParagraph $color={color}>
+              {task?.topic}
+            </CardThemeParagraph>
           </CardTheme>
-          <Link to={"/task/" + task._id}>
+          <Link to={"/task/" + task?._id}>
             <CardBtn>
               <CardBtnDiv />
               <CardBtnDiv />
@@ -44,10 +65,8 @@ function CardsItem({ task }) {
             </CardBtn>
           </Link>
         </CardGroup>
-        <CardContent>
-          <a href="" target="_blank">
-            <CardTitle>{task.title}</CardTitle>
-          </a>
+        <CardContent $isDragging={isDragging}>
+          <CardTitle>{task?.title}</CardTitle>
           <CardDate>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -78,7 +97,7 @@ function CardsItem({ task }) {
               </defs>
             </svg>
             <CardDateParagraph>
-              {format(task.date, "dd.MM.yy")}
+              {format(task?.date, "dd.MM.yy")}
             </CardDateParagraph>
           </CardDate>
         </CardContent>

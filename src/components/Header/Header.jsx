@@ -12,14 +12,14 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 
 function Header() {
-  const { user } = useContext(AuthContext);
+  const { user, isPopUser, setIsPopUser } = useContext(AuthContext);
   const isLightTheme = true;
   const [isShow, setIsShow] = useState(false);
   const navigate = useNavigate();
 
   function handleUser(event) {
     event.preventDefault();
-    console.log(`${isShow} → ${!isShow}`);
+
     setIsShow(!isShow);
   }
 
@@ -32,9 +32,14 @@ function Header() {
   }
 
   useEffect(() => {
+    if (isPopUser) {
+      setIsShow(false);
+      setIsPopUser(false);
+    }
+
     isShow ? navigate("/user") : navigate("/");
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isShow]);
+  }, [isShow, isPopUser]);
 
   return (
     <SHeader>

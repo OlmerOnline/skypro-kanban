@@ -12,13 +12,17 @@ import { AuthContext } from "../../../context/AuthContext";
 
 function PopExit({ isShow }) {
   const navigate = useNavigate();
-  const { updateUser } = useContext(AuthContext);
+  const { updateUser, setIsPopUser } = useContext(AuthContext);
 
   function handleLogout(event) {
     event.preventDefault();
 
     updateUser(null);
     navigate("/login");
+  }
+
+  function handleCancel() {
+    setIsPopUser(true);
   }
 
   return (
@@ -33,7 +37,7 @@ function PopExit({ isShow }) {
               <ExitButton $isConfirm={true} onClick={handleLogout}>
                 Да, выйти
               </ExitButton>
-              <ExitButton $isConfirm={false} to="/">
+              <ExitButton $isConfirm={false} onClick={handleCancel}>
                 Нет, остаться
               </ExitButton>
             </PopExitFormGroup>

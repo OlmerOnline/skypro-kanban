@@ -8,6 +8,8 @@ function AuthProvider({ children }) {
       : null
   );
 
+  const [isPopUser, setIsPopUser] = useState(false);
+
   function updateUser(userData) {
     setUser(userData);
 
@@ -19,7 +21,7 @@ function AuthProvider({ children }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, updateUser }}>
+    <AuthContext.Provider value={{ user, updateUser, isPopUser, setIsPopUser }}>
       {children}
     </AuthContext.Provider>
   );
