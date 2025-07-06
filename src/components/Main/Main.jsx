@@ -8,10 +8,11 @@ import { AuthContext } from "../../context/AuthContext";
 import { TasksContext } from "../../context/TasksContext";
 
 function Main() {
-  const { user } = useContext(AuthContext);
+  const { user, globalTheme } = useContext(AuthContext);
   const { setTasks } = useContext(TasksContext);
 
   const [isLoading, setIsLoading] = useState(false);
+  const [theme, setTheme] = useState(globalTheme);
 
   const STATUSES = [
     "Без статуса",
@@ -20,6 +21,10 @@ function Main() {
     "Тестирование",
     "Готово",
   ];
+
+  useEffect(() => {
+    setTheme(globalTheme);
+  }, [globalTheme]);
 
   async function getTasks() {
     try {
@@ -46,7 +51,7 @@ function Main() {
   ));
 
   return (
-    <SMain>
+    <SMain $theme={theme}>
       <Container>
         <MainBlock>
           <MainContent>{isLoading ? <Loading /> : components}</MainContent>

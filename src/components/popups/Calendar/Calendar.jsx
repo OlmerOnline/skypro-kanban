@@ -10,9 +10,10 @@ import {
   SCalendar,
   Title,
 } from "./Calendar.styled";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import CalendarCell from "./CalendarCell";
 import { format } from "date-fns";
+import { AuthContext } from "../../../context/AuthContext";
 
 const MONTHS = [
   "Январь",
@@ -30,6 +31,13 @@ const MONTHS = [
 ];
 
 function Calendar({ date = null, isActive, isCancel = false }) {
+  const { globalTheme } = useContext(AuthContext);
+  const [theme, setTheme] = useState(globalTheme);
+
+  useEffect(() => {
+    setTheme(globalTheme);
+  }, [globalTheme]);
+
   const currentDate = new Date();
   const [indexMonth, setIndexMonth] = useState(currentDate.getMonth());
   const [year, setYear] = useState(currentDate.getFullYear());
@@ -70,7 +78,7 @@ function Calendar({ date = null, isActive, isCancel = false }) {
 
   return (
     <SCalendar $isActive={isActive}>
-      <Title>Даты</Title>
+      <Title $theme={theme}>Даты</Title>
       <div style={{ display: "block" }}>
         <Navigation>
           <Month>{`${MONTHS[indexMonth]} ${year}`}</Month>
@@ -78,6 +86,7 @@ function Calendar({ date = null, isActive, isCancel = false }) {
             <Action data-action="prev">
               <svg
                 onClick={handlePrevMonth}
+                style={{ fill: "#94A6BE" }}
                 xmlns="http://www.w3.org/2000/svg"
                 width="6"
                 height="11"
@@ -89,6 +98,7 @@ function Calendar({ date = null, isActive, isCancel = false }) {
             <Action data-action="next">
               <svg
                 onClick={handleNextMonth}
+                style={{ fill: "#94A6BE" }}
                 xmlns="http://www.w3.org/2000/svg"
                 width="6"
                 height="11"
@@ -122,7 +132,7 @@ function Calendar({ date = null, isActive, isCancel = false }) {
         <div style={{ padding: "0 7px" }}>
           <PeriodText>
             {textDeadline}
-            <span style={{ color: "#000000" }}>
+            <span style={{ color: theme === "light" ? "#000000" : "#FFFFFF" }}>
               {selectedDate ? format(selectedDate, "dd.MM.yy") : ""}
             </span>
             {"."}

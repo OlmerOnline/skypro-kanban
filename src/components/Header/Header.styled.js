@@ -1,9 +1,19 @@
 import styled from "styled-components";
 
+const bgColor = {
+  light: "#ffffff",
+  dark: "#20202C",
+};
+
+const userNameColor = {
+  light: "#565eef",
+  dark: "#FFFFFF",
+};
+
 export const SHeader = styled.header`
   width: 100%;
   margin: 0 auto;
-  background-color: #ffffff;
+  background-color: ${({ $theme }) => bgColor[$theme]};
 `;
 
 export const Container = styled.div`
@@ -62,7 +72,7 @@ export const HeaderUser = styled.a`
   justify-content: center;
   font-size: 14px;
   line-height: 20px;
-  color: #565eef;
+  color: ${({ $theme }) => userNameColor[$theme]};
   &:hover {
     color: #33399b;
   }

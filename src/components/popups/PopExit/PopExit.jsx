@@ -7,17 +7,24 @@ import {
   PopExitTtlH2,
   SPopExit,
 } from "./PopExit.styled";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../../context/AuthContext";
 
 function PopExit({ isShow }) {
+  const { updateUser, setIsPopUser, globalTheme, updateTheme } =
+    useContext(AuthContext);
+  const [theme, setTheme] = useState(globalTheme);
   const navigate = useNavigate();
-  const { updateUser, setIsPopUser } = useContext(AuthContext);
+
+  useEffect(() => {
+    setTheme(globalTheme);
+  }, [globalTheme]);
 
   function handleLogout(event) {
     event.preventDefault();
 
     updateUser(null);
+    updateTheme(null);
     navigate("/login");
   }
 
@@ -28,16 +35,24 @@ function PopExit({ isShow }) {
   return (
     <SPopExit id="popExit" $isShow={isShow}>
       <PopExitContainer>
-        <PopExitBlock>
+        <PopExitBlock $theme={theme}>
           <div>
-            <PopExitTtlH2>Выйти из аккаунта?</PopExitTtlH2>
+            <PopExitTtlH2 $theme={theme}>Выйти из аккаунта?</PopExitTtlH2>
           </div>
           <form id="formExit">
             <PopExitFormGroup>
-              <ExitButton $isConfirm={true} onClick={handleLogout}>
+              <ExitButton
+                $isConfirm={true}
+                $theme={theme}
+                onClick={handleLogout}
+              >
                 Да, выйти
               </ExitButton>
-              <ExitButton $isConfirm={false} onClick={handleCancel}>
+              <ExitButton
+                $isConfirm={false}
+                $theme={theme}
+                onClick={handleCancel}
+              >
                 Нет, остаться
               </ExitButton>
             </PopExitFormGroup>

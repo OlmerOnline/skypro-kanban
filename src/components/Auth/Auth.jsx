@@ -20,7 +20,7 @@ const VALIDATION_FIELDS = { name: false, login: false, password: false };
 
 function Auth({ isRegistration }) {
   const navigate = useNavigate();
-  const { updateUser } = useContext(AuthContext);
+  const { updateUser, updateTheme } = useContext(AuthContext);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -77,6 +77,7 @@ function Auth({ isRegistration }) {
 
       if (user) {
         updateUser(user);
+        updateTheme("light");
         navigate("/");
       }
     } catch (error) {

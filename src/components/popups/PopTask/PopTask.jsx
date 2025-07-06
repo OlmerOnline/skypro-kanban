@@ -35,9 +35,14 @@ function PopTask({ isShow }) {
 
   const { tasks, setTasks, calendarSelectedDate, setCalendarSelectedDate } =
     useContext(TasksContext);
-  const { user } = useContext(AuthContext);
+  const { user, globalTheme } = useContext(AuthContext);
+  const [theme, setTheme] = useState(globalTheme);
   const { id } = useParams();
   const navigate = useNavigate("");
+
+  useEffect(() => {
+    setTheme(globalTheme);
+  }, [globalTheme]);
 
   const [isGroupEditBtn, setIsGroupEditBtn] = useState(false);
   const [isReadOnly, setIsReadOnly] = useState(true);
@@ -139,6 +144,7 @@ function PopTask({ isShow }) {
       key={index}
       $isHide={taskStatus === status ? false : isHideStatus}
       $isActive={taskStatus === status}
+      $theme={theme}
       onClick={handleStatus}
     >
       <StatusThemeText>{status}</StatusThemeText>{" "}
@@ -148,30 +154,40 @@ function PopTask({ isShow }) {
   return (
     <SPopTask id="popBrowse" $isShow={isShow}>
       <Container>
-        <Block>
+        <Block $theme={theme}>
           <Content>
             <Header>
-              <Title>{task?.title}</Title>
-              <CategoriesTheme $isTop={true} $color={task?.topic}>
-                <ThemeText $color={task?.topic}>{task?.topic}</ThemeText>
+              <Title $theme={theme}>{task?.title}</Title>
+              <CategoriesTheme
+                $isTop={true}
+                $color={task?.topic}
+                $theme={theme}
+              >
+                <ThemeText $color={task?.topic} $theme={theme}>
+                  {task?.topic}
+                </ThemeText>
               </CategoriesTheme>
             </Header>
 
             <Status>
-              <StatusTitle>Статус</StatusTitle>
+              <StatusTitle $theme={theme}>Статус</StatusTitle>
               <StatusThemes>{components}</StatusThemes>
             </Status>
 
             <Wrap>
               <Form>
                 <FormBlock>
-                  <FormTitle htmlFor="textArea01">Описание задачи</FormTitle>
+                  <FormTitle htmlFor="textArea01" $theme={theme}>
+                    Описание задачи
+                  </FormTitle>
                   <FormArea
                     name="description"
                     placeholder="Введите описание задачи..."
                     value={taskDescription}
                     onChange={handleChange}
                     readOnly={isReadOnly}
+                    $isReadOnly={isReadOnly}
+                    $theme={theme}
                   />
                 </FormBlock>
               </Form>
@@ -182,17 +198,14 @@ function PopTask({ isShow }) {
               />
             </Wrap>
 
-            <BlockCategoriesBot>
-              <CategoriesBotTitle>Категория</CategoriesBotTitle>
-              <CategoriesTheme $isTop={false} $color={task?.topic}>
-                <ThemeText $color={task?.topic}>{task?.topic}</ThemeText>
-              </CategoriesTheme>
-            </BlockCategoriesBot>
-
             <ButtonsBlock $isShow={!isGroupEditBtn}>
               <div>
-                <BtnWhite onClick={handleEdit}>Редактировать задачу</BtnWhite>
-                <BtnWhite onClick={handleDelete}>Удалить задачу</BtnWhite>
+                <BtnWhite $theme={theme} onClick={handleEdit}>
+                  Редактировать задачу
+                </BtnWhite>
+                <BtnWhite $theme={theme} onClick={handleDelete}>
+                  Удалить задачу
+                </BtnWhite>
               </div>
               <BtnBlue onClick={handleClose}>Закрыть</BtnBlue>
             </ButtonsBlock>
@@ -202,8 +215,12 @@ function PopTask({ isShow }) {
                 <BtnBlue style={{ marginRight: "8px" }} onClick={handleSave}>
                   Сохранить
                 </BtnBlue>
-                <BtnWhite onClick={handleCancel}>Отменить</BtnWhite>
-                <BtnWhite onClick={handleDelete}>Удалить задачу</BtnWhite>
+                <BtnWhite $theme={theme} onClick={handleCancel}>
+                  Отменить
+                </BtnWhite>
+                <BtnWhite $theme={theme} onClick={handleDelete}>
+                  Удалить задачу
+                </BtnWhite>
               </div>
               <BtnBlue onClick={handleClose}>Закрыть</BtnBlue>
             </ButtonsBlock>

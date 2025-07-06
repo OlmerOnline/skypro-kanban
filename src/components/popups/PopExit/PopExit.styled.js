@@ -1,6 +1,23 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
+const bgColor = {
+  light: "#FFFFFF",
+  dark: "#20202C",
+};
+const borderColor = {
+  light: "rgb(212, 219, 229)",
+  dark: "rgb(78, 85, 102)",
+};
+const titleColor = {
+  light: "#000000",
+  dark: "#FFFFFF",
+};
+const btnColor = {
+  light: "#565EEF",
+  dark: "#FFFFFF",
+};
+
 export const SPopExit = styled.div`
   display: ${({ $isShow }) => ($isShow ? "block" : "none")};
   width: 100%;
@@ -33,16 +50,17 @@ export const PopExitContainer = styled.div`
 export const PopExitBlock = styled.div`
   display: block;
   margin: 0 auto;
-  background-color: #ffffff;
+  background-color: ${({ $theme }) => bgColor[$theme]};
   max-width: 370px;
   width: 100%;
   padding: 50px 60px;
   border-radius: 10px;
-  border: 0.7px solid #d4dbe5;
+  border: 0.7px solid ${({ $theme }) => borderColor[$theme]};
   box-shadow: 0px 4px 67px -12px rgba(0, 0, 0, 0.13);
 `;
 
 export const PopExitTtlH2 = styled.h2`
+  color: ${({ $theme }) => titleColor[$theme]};
   text-align: center;
   font-size: 20px;
   font-weight: 700;
@@ -64,9 +82,13 @@ export const ExitButton = styled(Link)`
   height: 30px;
   background-color: ${({ $isConfirm }) =>
     $isConfirm ? "#565eef" : "transparent"};
-  color: ${({ $isConfirm }) => ($isConfirm ? "#ffffff" : "#565eef")};
-  border: ${({ $isConfirm }) =>
-    $isConfirm ? "none" : "0.7px solid var(--palette-navy-60, #565eef)"};
+  color: ${({ $isConfirm, $theme }) =>
+    $isConfirm ? "#ffffff" : btnColor[$theme]};
+  border: ${({ $isConfirm, $theme }) =>
+    $isConfirm
+      ? "none"
+      : `0.7px solid var(--palette-navy-60, ${btnColor[$theme]})`};
+  border-radius: 4px;
   outline: none;
   display: flex;
   align-items: center;
@@ -76,7 +98,9 @@ export const ExitButton = styled(Link)`
   letter-spacing: -0.14px;
 
   &:hover {
-    background-color: #33399b;
+    background-color: ${({ $isConfirm }) =>
+      $isConfirm ? "#33399b" : "#565EEF"};
     color: ${({ $isConfirm }) => !$isConfirm && "#ffffff"};
+    border: #565eef;
   }
 `;

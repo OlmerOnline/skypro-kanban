@@ -33,10 +33,15 @@ const VALIDATION_FIELDS = {
 };
 
 function PopNewTask({ isShow }) {
-  const { user } = useContext(AuthContext);
+  const { user, globalTheme } = useContext(AuthContext);
   const { setTasks, calendarSelectedDate, setCalendarSelectedDate } =
     useContext(TasksContext);
+  const [colorTheme, setColorTheme] = useState(globalTheme);
   const navigate = useNavigate("");
+
+  useEffect(() => {
+    setColorTheme(globalTheme);
+  }, [globalTheme]);
 
   const [theme, setTheme] = useState("");
   const [formData, setFormData] = useState({
@@ -69,25 +74,21 @@ function PopNewTask({ isShow }) {
     if (!theme) {
       newError.theme = true;
       setTextError("Выберите категорию задачи");
-      console.log("theme");
       isValid = false;
     }
     if (!calendarSelectedDate) {
       newError.date = true;
       setTextError("Выберите дату");
-      console.log("date");
       isValid = false;
     }
     if (!formData.description.trim()) {
       newError.description = true;
       setTextError("Введите описание задачи");
-      console.log("description");
       isValid = false;
     }
     if (!formData.title.trim()) {
       newError.title = true;
       setTextError("Введите название задачи");
-      console.log("title");
       isValid = false;
     }
 
@@ -144,15 +145,19 @@ function PopNewTask({ isShow }) {
   return (
     <SPopNewTask id="popNewCard" $isShow={isShow}>
       <Container>
-        <Block>
+        <Block $theme={colorTheme}>
           <Content>
-            <Title>Создание задачи</Title>
-            <CloseBtn to="/">&#10006;</CloseBtn>
+            <Title $theme={colorTheme}>Создание задачи</Title>
+            <CloseBtn $theme={colorTheme} to="/">
+              &#10006;
+            </CloseBtn>
 
             <Wrap>
               <Form id="formNewTask">
                 <FormBlock>
-                  <FormTitle htmlFor="formTitle">Название задачи</FormTitle>
+                  <FormTitle htmlFor="formTitle" $theme={colorTheme}>
+                    Название задачи
+                  </FormTitle>
                   <FormInput
                     type="text"
                     name="title"
@@ -164,7 +169,9 @@ function PopNewTask({ isShow }) {
                   />
                 </FormBlock>
                 <FormBlock>
-                  <FormTitle htmlFor="textArea">Описание задачи</FormTitle>
+                  <FormTitle htmlFor="textArea" $theme={colorTheme}>
+                    Описание задачи
+                  </FormTitle>
                   <FormArea
                     name="description"
                     id="textArea"
@@ -179,28 +186,37 @@ function PopNewTask({ isShow }) {
             </Wrap>
 
             <Categories>
-              <CategoriesTitle>Категория</CategoriesTitle>
+              <CategoriesTitle $theme={colorTheme}>Категория</CategoriesTitle>
               <CategoriesThemes>
                 <Theme
                   $color="orange"
                   $isActive={theme === "Web Design"}
+                  $theme={colorTheme}
                   onClick={handleTheme}
                 >
-                  <ThemeText $color="orange">Web Design</ThemeText>
+                  <ThemeText $color="orange" $theme={colorTheme}>
+                    Web Design
+                  </ThemeText>
                 </Theme>
                 <Theme
                   $color="green"
                   $isActive={theme === "Research"}
+                  $theme={colorTheme}
                   onClick={handleTheme}
                 >
-                  <ThemeText $color="green">Research</ThemeText>
+                  <ThemeText $color="green" $theme={colorTheme}>
+                    Research
+                  </ThemeText>
                 </Theme>
                 <Theme
                   $color="purple"
                   $isActive={theme === "Copywriting"}
+                  $theme={colorTheme}
                   onClick={handleTheme}
                 >
-                  <ThemeText $color="purple">Copywriting</ThemeText>
+                  <ThemeText $color="purple" $theme={colorTheme}>
+                    Copywriting
+                  </ThemeText>
                 </Theme>
               </CategoriesThemes>
             </Categories>

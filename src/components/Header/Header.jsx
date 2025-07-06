@@ -12,10 +12,15 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 
 function Header() {
-  const { user, isPopUser, setIsPopUser } = useContext(AuthContext);
-  const isLightTheme = true;
+  const { user, isPopUser, setIsPopUser, globalTheme } =
+    useContext(AuthContext);
   const [isShow, setIsShow] = useState(false);
+  const [theme, setTheme] = useState(globalTheme);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    setTheme(globalTheme);
+  }, [globalTheme]);
 
   function handleUser(event) {
     event.preventDefault();
@@ -42,10 +47,10 @@ function Header() {
   }, [isShow, isPopUser]);
 
   return (
-    <SHeader>
+    <SHeader $theme={theme}>
       <Container>
         <HeaderBlock>
-          <HeaderLogo $display={isLightTheme ? "block" : "none"}>
+          <HeaderLogo $display={theme === "light" ? "block" : "none"}>
             <a onClick={handleLogo}>
               <img
                 src="/images/logo.png"
@@ -54,7 +59,7 @@ function Header() {
               />
             </a>
           </HeaderLogo>
-          <HeaderLogo $display={isLightTheme ? "none" : "block"}>
+          <HeaderLogo $display={theme === "dark" ? "block" : "none"}>
             <a onClick={handleLogo}>
               <img
                 src="/images/logo_dark.png"
@@ -67,7 +72,9 @@ function Header() {
             <HeaderBtnMainNew onClick={handleNewTask}>
               {"Создать новую задачу"}
             </HeaderBtnMainNew>
-            <HeaderUser onClick={handleUser}>{user.name}</HeaderUser>
+            <HeaderUser id={"userName"} $theme={theme} onClick={handleUser}>
+              {user.name}
+            </HeaderUser>
           </HeaderNav>
         </HeaderBlock>
       </Container>

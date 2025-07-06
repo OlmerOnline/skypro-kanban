@@ -3,17 +3,32 @@ import styled from "styled-components";
 
 const colors = {
   orange: {
-    color: "#ff6d00",
-    bg: "#ffe4c2",
+    faint: "#ff6d00",
+    saturated: "#ffe4c2",
   },
   green: {
-    color: "#06b16e",
-    bg: "#b4fdd1",
+    faint: "#06b16e",
+    saturated: "#b4fdd1",
   },
   purple: {
-    color: "#9a48f1",
-    bg: "#e9d4ff",
+    faint: "#9a48f1",
+    saturated: "#e9d4ff",
   },
+};
+
+const bgColor = {
+  light: "#ffffff",
+  dark: "#20202C",
+};
+
+const borderColor = {
+  light: "rgb(212, 219, 229)",
+  dark: "rgb(78, 85, 102)",
+};
+
+const textColor = {
+  light: "#000000",
+  dark: "#FFFFFF",
 };
 
 export const SPopNewTask = styled.div`
@@ -45,12 +60,12 @@ Container.displayName = "Container";
 export const Block = styled.div`
   display: block;
   margin: 0 auto;
-  background-color: #ffffff;
+  background-color: ${({ $theme }) => bgColor[$theme]};
   max-width: 630px;
   width: 100%;
   padding: 40px 30px 48px;
   border-radius: 10px;
-  border: 0.7px solid #d4dbe5;
+  border: 0.7px solid ${({ $theme }) => borderColor[$theme]}; //#d4dbe5;
   position: relative;
 `;
 Block.displayName = "Block";
@@ -62,7 +77,7 @@ export const Content = styled.div`
 Content.displayName = "Content";
 
 export const Title = styled.h3`
-  color: #000;
+  color: ${({ $theme }) => textColor[$theme]};
   font-size: 20px;
   font-weight: 600;
   line-height: 24px;
@@ -78,7 +93,8 @@ export const CloseBtn = styled(Link)`
   cursor: pointer;
 
   &:hover {
-    color: #000000;
+    color: ${({ $theme }) =>
+      $theme === "light" ? "#000000" : "#FFFFFF"}; //#000000;
   }
 `;
 CloseBtn.displayName = "CloseBtn";
@@ -105,7 +121,7 @@ export const FormBlock = styled.div`
 FormBlock.displayName = "FormBlock";
 
 export const FormTitle = styled.label`
-  color: #000;
+  color: ${({ $theme }) => textColor[$theme]};
   font-size: 14px;
   font-weight: 600;
   line-height: 1;
@@ -152,7 +168,7 @@ export const Categories = styled.div`
 Categories.displayName = "Categories";
 
 export const CategoriesTitle = styled.p`
-  color: #000;
+  color: ${({ $theme }) => textColor[$theme]};
   font-size: 14px;
   font-weight: 600;
   line-height: 1;
@@ -177,7 +193,8 @@ export const Theme = styled.div`
   margin-right: 7px;
   cursor: pointer;
   opacity: ${({ $isActive }) => ($isActive ? 1 : 0.4)}; //0.4;
-  background-color: ${({ $color }) => colors[$color].bg};
+  background-color: ${({ $color, $theme }) =>
+    $theme === "light" ? colors[$color].saturated : colors[$color].faint};
 `;
 Theme.displayName = "Theme";
 
@@ -186,7 +203,8 @@ export const ThemeText = styled.p`
   font-weight: 600;
   line-height: 14px;
   white-space: nowrap;
-  color: ${({ $color }) => colors[$color].color};
+  color: ${({ $color, $theme }) =>
+    $theme === "light" ? colors[$color].faint : colors[$color].saturated};
 `;
 ThemeText.displayName = "ThemeText";
 

@@ -1,5 +1,10 @@
 import styled from "styled-components";
 
+const textColor = {
+  light: "#000000",
+  dark: "#FFFFFF",
+};
+
 export const SCalendar = styled.div`
   width: 182px;
   margin-bottom: 20px;
@@ -10,7 +15,7 @@ SCalendar.displayName = "SCalendar";
 export const Title = styled.p`
   margin-bottom: 14px;
   padding: 0 7px;
-  color: #000;
+  color: ${({ $theme }) => textColor[$theme]};
   font-size: 14px;
   font-weight: 600;
   line-height: 1;

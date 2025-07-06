@@ -8,12 +8,25 @@ import {
   PopUserSetThemeInput,
   PopUserSetThemeParagraph,
 } from "./PopUser.styled";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../../context/AuthContext";
 
 function PopUser({ isShow }) {
-  const { user } = useContext(AuthContext);
+  const { user, globalTheme, updateTheme } = useContext(AuthContext);
+  const [theme, setTheme] = useState(globalTheme);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    setTheme(globalTheme);
+  }, [globalTheme]);
+
+  const elem = document.getElementById("userName");
+  const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+  const left = elem?.getBoundingClientRect().left + scrollLeft;
+
+  function handleCheckbox(event) {
+    event.target.checked ? updateTheme("dark") : updateTheme("light");
+  }
 
   function handleExit(event) {
     event.preventDefault();
@@ -22,17 +35,25 @@ function PopUser({ isShow }) {
   }
 
   return (
-    <HeaderPopUserSet $isShow={isShow} id="user-set-target">
-      <PopUserSetName>{user.name}</PopUserSetName>
+    <HeaderPopUserSet $isShow={isShow} $left={left} $theme={theme}>
+      <PopUserSetName $theme={theme}>{user.name}</PopUserSetName>
       <PopUserSetMail>{user.login}</PopUserSetMail>
       <PopUserSetTheme>
-        <PopUserSetThemeParagraph>Темная тема</PopUserSetThemeParagraph>
+        <PopUserSetThemeParagraph $theme={theme}>
+          Темная тема
+        </PopUserSetThemeParagraph>
         <PopUserSetThemeInput
+          id="checkboxTheme"
           type="checkbox"
           name="checkbox"
+          checked={theme === "dark"}
+          $theme={theme}
+          onChange={handleCheckbox}
         ></PopUserSetThemeInput>
       </PopUserSetTheme>
-      <PopUserSetButton onClick={handleExit}>Выход</PopUserSetButton>
+      <PopUserSetButton $theme={theme} onClick={handleExit}>
+        Выход
+      </PopUserSetButton>
     </HeaderPopUserSet>
 
     // <div

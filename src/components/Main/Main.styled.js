@@ -1,8 +1,13 @@
 import styled from "styled-components";
 
+const bgColor = {
+  light: "#eaeef6",
+  dark: "#151419",
+};
+
 export const SMain = styled.main`
   width: 100%;
-  background-color: #eaeef6;
+  background-color: ${({ $theme }) => bgColor[$theme]};
 `;
 
 export const Container = styled.div`

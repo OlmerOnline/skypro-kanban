@@ -1,18 +1,28 @@
 import styled, { keyframes } from "styled-components";
 
-const colors = {
+const topicColors = {
   orange: {
-    text: "#ff6d00",
-    bg: "#ffe4c2",
+    faint: "#ff6d00",
+    saturated: "#ffe4c2",
   },
   green: {
-    text: "#06b16e",
-    bg: "#b4fdd1",
+    faint: "#06b16e",
+    saturated: "#b4fdd1",
   },
   purple: {
-    text: "#9a48f1",
-    bg: "#e9d4ff",
+    faint: "#9a48f1",
+    saturated: "#e9d4ff",
   },
+};
+
+const bgColor = {
+  light: "#ffffff",
+  dark: "#20202C",
+};
+
+const textColor = {
+  light: "#000000",
+  dark: "#FFFFFF",
 };
 
 const cardAnimation = keyframes`
@@ -37,8 +47,8 @@ export const SCardsItem = styled.div`
 export const CardsCard = styled.div`
   width: 220px;
   height: 130px;
-  background-color: ${({ $isDragging }) =>
-    $isDragging ? "transparent" : "#ffffff"};
+  background-color: ${({ $isDragging, $theme }) =>
+    $isDragging ? "transparent" : bgColor[$theme]};
   border-radius: 10px;
   border: ${({ $isDragging }) => ($isDragging ? "1px dashed #94A6BE" : "none")};
   display: flex;
@@ -62,14 +72,20 @@ export const CardTheme = styled.div`
   height: 20px;
   padding: 5px 14px;
   border-radius: 18px;
-  background-color: ${({ $color }) => colors[$color].bg};
+  background-color: ${({ $color, $theme }) =>
+    $theme === "light"
+      ? topicColors[$color].saturated
+      : topicColors[$color].faint};
 `;
 
 export const CardThemeParagraph = styled.p`
   font-size: 10px;
   font-weight: 600;
   line-height: 10px;
-  color: ${({ $color }) => colors[$color].text};
+  color: ${({ $color, $theme }) =>
+    $theme === "light"
+      ? topicColors[$color].faint
+      : topicColors[$color].saturated};
 `;
 
 export const CardBtn = styled.div`
@@ -100,7 +116,7 @@ export const CardTitle = styled.h3`
   font-size: 14px;
   font-weight: 500;
   line-height: 18px;
-  color: #000000;
+  color: ${({ $theme }) => textColor[$theme]};
   margin-bottom: 10px;
 `;
 

@@ -14,11 +14,18 @@ import {
 } from "./CardsItem.styled";
 import { format } from "date-fns";
 import { useDrag } from "react-dnd";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { TasksContext } from "../../../context/TasksContext";
+import { AuthContext } from "../../../context/AuthContext";
 
 function CardsItem({ task }) {
   const { setDragStatus } = useContext(TasksContext);
+  const { globalTheme } = useContext(AuthContext);
+  const [theme, setTheme] = useState(globalTheme);
+
+  useEffect(() => {
+    setTheme(globalTheme);
+  }, [globalTheme]);
 
   const [{ isDragging }, dragRef] = useDrag(() => ({
     type: "card",
@@ -50,10 +57,10 @@ function CardsItem({ task }) {
 
   return (
     <SCardsItem ref={dragRef}>
-      <CardsCard $isDragging={isDragging}>
+      <CardsCard $theme={theme} $isDragging={isDragging}>
         <CardGroup $isDragging={isDragging}>
-          <CardTheme $color={color}>
-            <CardThemeParagraph $color={color}>
+          <CardTheme $theme={theme} $color={color}>
+            <CardThemeParagraph $theme={theme} $color={color}>
               {task?.topic}
             </CardThemeParagraph>
           </CardTheme>
@@ -66,7 +73,7 @@ function CardsItem({ task }) {
           </Link>
         </CardGroup>
         <CardContent $isDragging={isDragging}>
-          <CardTitle>{task?.title}</CardTitle>
+          <CardTitle $theme={theme}>{task?.title}</CardTitle>
           <CardDate>
             <svg
               xmlns="http://www.w3.org/2000/svg"

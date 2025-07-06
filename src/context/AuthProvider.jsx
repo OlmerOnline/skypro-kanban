@@ -7,7 +7,11 @@ function AuthProvider({ children }) {
       ? JSON.parse(localStorage.getItem("user"))
       : null
   );
-
+  const [globalTheme, setGlobalTheme] = useState(
+    localStorage.getItem("theme")
+      ? JSON.parse(localStorage.getItem("theme"))
+      : "light"
+  );
   const [isPopUser, setIsPopUser] = useState(false);
 
   function updateUser(userData) {
@@ -16,12 +20,31 @@ function AuthProvider({ children }) {
     if (userData) {
       localStorage.setItem("user", JSON.stringify(userData));
     } else {
-      localStorage.clear();
+      localStorage.removeItem("user");
+    }
+  }
+
+  function updateTheme(themeData) {
+    setGlobalTheme(themeData);
+
+    if (themeData) {
+      localStorage.setItem("theme", JSON.stringify(themeData));
+    } else {
+      localStorage.removeItem("theme");
     }
   }
 
   return (
-    <AuthContext.Provider value={{ user, updateUser, isPopUser, setIsPopUser }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        updateUser,
+        isPopUser,
+        setIsPopUser,
+        globalTheme,
+        updateTheme,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
