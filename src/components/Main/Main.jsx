@@ -46,7 +46,7 @@ function Main() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const components = STATUSES.map((status, index) => (
+  const componentColumns = STATUSES.map((status, index) => (
     <Column key={index} status={status} />
   ));
 
@@ -54,7 +54,10 @@ function Main() {
     <SMain $theme={theme}>
       <Container>
         <MainBlock>
-          <MainContent>{isLoading ? <Loading /> : components}</MainContent>
+          {/* <MainContent>{<Loading />}</MainContent> */}
+          <MainContent>
+            {isLoading ? <Loading /> : componentColumns}
+          </MainContent>
         </MainBlock>
       </Container>
       <Outlet />

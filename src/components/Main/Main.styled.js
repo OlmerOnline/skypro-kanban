@@ -27,9 +27,3 @@ export const MainContent = styled.div`
   width: 100%;
   display: flex;
 `;
-
-export const SLoading = styled.div`
-  display: flex;
-  justify-content: center;
-  margin: auto;
-`;
