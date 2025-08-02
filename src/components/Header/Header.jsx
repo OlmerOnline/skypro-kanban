@@ -51,7 +51,7 @@ function Header() {
       <Container>
         <HeaderBlock>
           <HeaderLogo $display={theme === "light" ? "block" : "none"}>
-            <a onClick={handleLogo}>
+            <a style={{ display: "flex" }} onClick={handleLogo}>
               <img
                 src="/images/logo.png"
                 alt="logo"
@@ -60,7 +60,7 @@ function Header() {
             </a>
           </HeaderLogo>
           <HeaderLogo $display={theme === "dark" ? "block" : "none"}>
-            <a onClick={handleLogo}>
+            <a style={{ display: "flex" }} onClick={handleLogo}>
               <img
                 src="/images/logo_dark.png"
                 alt="logo"

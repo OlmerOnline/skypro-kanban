@@ -21,6 +21,10 @@ export const Container = styled.div`
   width: 100%;
   margin: 0 auto;
   padding: 0 30px;
+
+  @media (max-width: 425px) {
+    padding: 0 20px;
+  }
 `;
 
 export const HeaderBlock = styled.div`
@@ -33,6 +37,10 @@ export const HeaderBlock = styled.div`
   top: 0;
   left: 0;
   padding: 0 10px;
+
+  @media (max-width: 425px) {
+    padding: 0;
+  }
 `;
 
 export const HeaderLogo = styled.div`
@@ -61,6 +69,10 @@ export const HeaderBtnMainNew = styled.button`
   &:hover {
     background-color: #33399b;
   }
+
+  @media (max-width: 425px) {
+    display: none;
+  }
 `;
 HeaderBtnMainNew.displayName = "HeaderBtnMainNew";
 
@@ -70,6 +82,7 @@ export const HeaderUser = styled.a`
   flex-wrap: nowrap;
   align-items: center;
   justify-content: center;
+  font-weight: 500;
   font-size: 14px;
   line-height: 20px;
   color: ${({ $theme }) => userNameColor[$theme]};

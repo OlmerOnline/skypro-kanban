@@ -15,15 +15,27 @@ export const Container = styled.div`
   width: 100%;
   margin: 0 auto;
   padding: 0 30px;
+
+  @media (max-width: 425px) {
+    padding: 0 16px;
+  }
 `;
 
 export const MainBlock = styled.div`
   width: 100%;
   margin: 0 auto;
   padding: 25px 0 49px;
+
+  @media (max-width: 425px) {
+    padding: 30px 0 30px;
+  }
 `;
 
 export const MainContent = styled.div`
   width: 100%;
   display: flex;
+
+  @media (max-width: 425px) {
+    flex-direction: column;
+  }
 `;

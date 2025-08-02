@@ -31,10 +31,7 @@ function Loading() {
       <ColumnTitle key={index}>
         <ColumnTitleParagraph key={index}>{status}</ColumnTitleParagraph>
       </ColumnTitle>
-      <Cards>
-        {componentCards[index]}
-        {/* <CardsItemLoading /> */}
-      </Cards>
+      <Cards>{componentCards[index]}</Cards>
     </MainColumn>
   ));
 

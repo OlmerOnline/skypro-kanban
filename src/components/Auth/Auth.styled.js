@@ -48,6 +48,10 @@ export const Wrapper = styled.div`
   overflow-x: hidden;
   overflow-y: scroll;
   background-color: #eaeef6;
+
+  @media (max-width: 425px) {
+    background-color: #ffffff;
+  }
 `;
 Wrapper.displayName = "Wrapper";
 
@@ -81,6 +85,13 @@ export const ModalBlock = styled.div`
   border-radius: 10px;
   border: 0.7px solid #d4dbe5;
   box-shadow: 0px 4px 67px -12px rgba(0, 0, 0, 0.13);
+
+  @media (max-width: 425px) {
+    border: none;
+    box-shadow: none;
+    padding: 0 16px;
+    max-width: none;
+  }
 `;
 ModalBlock.displayName = "ModalBlock";
 
@@ -124,6 +135,10 @@ export const InputAuth = styled.input`
     letter-spacing: -0.28px;
     color: #94a6be;
   }
+
+  @media (max-width: 425px) {
+    height: 40px;
+  }
 `;
 InputAuth.displayName = "InputAuth";
 
@@ -132,7 +147,7 @@ export const ButtonEnter = styled.button`
   height: 30px;
   background-color: #565eef;
   border-radius: 4px;
-  margin-top: 20px;
+  margin-top: 13px;
   margin-bottom: 20px;
   border: none;
   outline: none;
@@ -155,10 +170,16 @@ export const ButtonEnter = styled.button`
     background-color: #94a6be;
     cursor: auto;
   }
+
+  @media (max-width: 425px) {
+    height: 40px;
+  }
 `;
 ButtonEnter.displayName = "ButtonEnter";
 
 export const FooterAuth = styled.footer`
+  display: ${({ $isRegistration }) => ($isRegistration ? "flex" : "block")};
+  gap: 5px;
   text-align: center;
 `;
 FooterAuth.displayName = "FooterAuth";

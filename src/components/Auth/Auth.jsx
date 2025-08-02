@@ -139,7 +139,9 @@ function Auth({ isRegistration }) {
                   onChange={handleChange}
                   $error={errors.password}
                 />
-                <p style={{ color: "red" }}>{textError}</p>
+                <p style={{ color: "red", fontWeight: 400, fontSize: 14 }}>
+                  {textError}
+                </p>
                 <ButtonEnter
                   id="btnEnter"
                   onClick={handleLogin}
@@ -147,7 +149,7 @@ function Auth({ isRegistration }) {
                 >
                   {!isRegistration ? "Войти" : "Зарегистрироваться"}
                 </ButtonEnter>
-                <FooterAuth>
+                <FooterAuth $isRegistration={isRegistration}>
                   <FooterAuthParagraph>
                     {!isRegistration
                       ? "Нужно зарегистрироваться?"

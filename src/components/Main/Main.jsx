@@ -54,7 +54,6 @@ function Main() {
     <SMain $theme={theme}>
       <Container>
         <MainBlock>
-          {/* <MainContent>{<Loading />}</MainContent> */}
           <MainContent>
             {isLoading ? <Loading /> : componentColumns}
           </MainContent>

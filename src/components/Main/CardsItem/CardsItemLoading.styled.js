@@ -7,7 +7,8 @@ export const SCardsItem = styled.div`
 export const CardsCard = styled.div`
   width: 220px;
   height: 130px;
-  background-color: #ffffff;
+  background-color: ${({ $theme }) =>
+    $theme === "light" ? "#ffffff" : "#20202C"};
   border-radius: 10px;
 
   display: flex;
